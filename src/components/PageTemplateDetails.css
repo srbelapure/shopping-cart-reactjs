@@ -1,0 +1,7 @@
+.footer-section,.header-section{
+    background-color: darkgray;
+    padding: 20px;
+    margin-top: 5px;
+    text-align: center;
+    font-weight: bold;
+}

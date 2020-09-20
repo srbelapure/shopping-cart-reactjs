@@ -1,0 +1,9 @@
+//categories
+export const CATEGORIES_LOADING = "CATEGORIES_LOADING";
+export const CATEGORIES_FAILED = "CATEGORIES_FAILED";
+export const ADD_CATEGORIES = "ADD_CATEGORIES";
+
+
+
+
+
