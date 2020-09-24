@@ -1,7 +1,85 @@
-.footer-section,.header-section{
-    background-color: darkgray;
-    padding: 20px;
-    margin-top: 5px;
-    text-align: center;
-    font-weight: bold;
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+#root{
+    height: 100%;
+    overflow: auto;
+}
+
+.container-section {
+  height: 100%;
+  overflow:scroll;
+}
+
+.footer-section,
+.header-section {
+  background-color: darkgray;
+  padding: 20px;
+  margin-top: 5px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.footer-section {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.category-options {
+  padding: 10px;
+}
+
+.category-items {
+  display: flex;
+  margin: 10px;
+}
+
+.category-options button {
+  background-color: lightgray;
+  font-weight: bold;
+}
+
+.sub-items-cards {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 10px;
+}
+
+.card {
+  display: inline-table !important;
+}
+
+.costume-size {
+  border: 2px solid black;
+  margin: 2px;
+  padding: 2px;
+}
+
+.cart-items-section {
+  width: 40%;
+  float: right;
+  background-color: gainsboro;
+  height: 600px;
+  display: none;
+}
+
+.show-cart {
+  width: 40%;
+  float: right;
+  background-color: gainsboro;
+  height: 100%;
+  display: block;
+}
+
+.hide-cart {
+  width: 40%;
+  float: right;
+  background-color: gainsboro;
+  height: 100%;
+  display: none;
 }
