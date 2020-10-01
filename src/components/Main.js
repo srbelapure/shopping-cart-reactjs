@@ -3,7 +3,7 @@ import FooterComponent from "./FooterComponent";
 import HeaderComponent from "./HeaderComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { fetchCategories,fetchSubCategories ,postItemsToCart} from "../redux/ActionCreators";
+import { fetchCategories,fetchSubCategories ,postItemsToCart, fetchCartItems} from "../redux/ActionCreators";
 import LoginPage from "./LoginPage";
 import ProductsPage from "./ProductsPage";
 
@@ -12,7 +12,8 @@ import Test from './test11'
 const mapStateToProps = (state) => {
   return {
     Categories: state.Categories,
-    subcategories: state.subcategories
+    subcategories: state.subcategories,
+    // cartItems:state.cart_Items
   };
 };
 
@@ -20,7 +21,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   fetchCategories: () => dispatch(fetchCategories()),
   fetchSubCategories:()=>dispatch(fetchSubCategories()),
-  postItemsToCart:(additemstocart)=>dispatch(postItemsToCart(additemstocart))
+  // fetchCartItems:()=>dispatch(fetchCartItems()),
+  // postItemsToCart:(id,categoryid,name,image,date,price,size)=>dispatch(postItemsToCart(id,categoryid,name,image,date,price,size))
 });
 
 class Main extends Component {
@@ -32,6 +34,7 @@ class Main extends Component {
   componentDidMount() {
     this.props.fetchSubCategories();
     this.props.fetchCategories();
+    //this.props.fetchCartItems();
   }
 
   render() {
@@ -46,7 +49,9 @@ class Main extends Component {
               <ProductsPage
                 categoryDetails={this.props.Categories.categories}
                 subcategoryItems={this.props.subcategories.subcategories}
-                postItemsToCart={this.props.postItemsToCart}
+                // postItemsToCart={this.props.postItemsToCart}
+                // cartItems={this.props.cartItems.cartItemsList}
+                // fetchCartItems={this.props.fetchCartItems}
               />
             )}
           />
