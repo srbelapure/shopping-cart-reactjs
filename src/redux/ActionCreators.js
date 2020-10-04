@@ -1,6 +1,6 @@
 import * as ActionTypes from "./ActionTypes";
 import { baseUrl } from "../shared/baseUrl";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 //for loading categories
 export const categoriesLoading = () => ({
@@ -101,41 +101,28 @@ export const loadCartItemsFailed = (errorMessage) => ({
 });
 
 //think to add items to cart
-export const postItemsToCart = (id,categoryid,name,image,date,price,size) => (dispatch) => {
-  // console.log(
-  //   "JSON.stringify(itemstocart)",
-  //   JSON.stringify(itemstocart),
-  //   itemstocart
-  // );
-  // var result = {};
-  // for (var i = 0; i < itemstocart.length; i++) {
-  //   return(
-  //     result[itemstocart[i].id] = itemstocart[i].id,
-  //   result[itemstocart[i].name] = itemstocart[i].name,
-  //   result[itemstocart[i].times] = itemstocart[i].times,
-  //   result[itemstocart[i].image] = itemstocart[i].image,
-  //   result[itemstocart[i].price] = itemstocart[i].price
-  //   )
-  // }
-
-  // var result = arr.reduce(
-  //   (obj, item) => Object.assign(obj, { [item.key]: item.value }),
-  //   {}
-  // );
-  var itemsList={
-    id:id+uuidv4(),
-    catid:categoryid,
-    name:name,
-    price:price,
-    image:image,
-    date:date,
-    size:size,
-    // totalamount:totalamount
-  }
+export const postItemsToCart = (
+  id,
+  categoryid,
+  name,
+  image,
+  date,
+  price,
+  size
+) => (dispatch) => {
+  var itemsList = {
+    id: id + uuidv4(),
+    catid: categoryid,
+    name: name,
+    price: price,
+    image: image,
+    date: date,
+    size: size
+  };
 
   return fetch(baseUrl + "additemstocart", {
     method: "POST",
-    body: JSON.stringify(itemsList) ,
+    body: JSON.stringify(itemsList),
     headers: {
       "Content-Type": "application/json",
     },
@@ -159,8 +146,12 @@ export const postItemsToCart = (id,categoryid,name,image,date,price,size) => (di
     )
     .then((response) => response.json())
     .then((response) =>
-      alert("Thank you for your feedback!\n" + JSON.stringify(response))
+      alert(
+        "Following item has been added to the cart!\n" +
+          JSON.stringify(response)
+      )
     )
+    .then(() => dispatch(fetchCartItems()))
     .catch((error) => {
       console.log("post comments", error.message);
       alert("Your comment could not be posted\nError: " + error.message);

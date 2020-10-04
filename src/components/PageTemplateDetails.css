@@ -4,30 +4,30 @@ body {
   margin: 0;
 }
 
-#root{
-    height: 100%;
-    overflow: auto;
+#root {
+  height: 100%;
+  overflow-y: scroll;
 }
 
 .container-section {
   height: 100%;
-  overflow:scroll;
+  overflow-y: scroll;
 }
 
 .footer-section,
 .header-section {
   background-color: darkgray;
-  padding: 20px;
-  margin-top: 5px;
+  padding: 15px;
   text-align: center;
   font-weight: bold;
 }
 
 .footer-section {
-  position: fixed;
+  position: sticky;
   left: 0;
   bottom: 0;
   width: 100%;
+  margin-top: 5px;
 }
 
 .category-options {
@@ -74,23 +74,23 @@ body {
   background-color: gainsboro;
   height: 100%;
   display: block;
+  overflow-y: auto;
 }
 
 .hide-cart {
-  width: 40%;
+  /* width: 40%;
   float: right;
   background-color: gainsboro;
-  height: 100%;
+  height: 100%; */
   display: none;
 }
 
-
-.checkout-details label{
+.checkout-details label {
   margin: 10px;
   width: 20%;
 }
 
-.checkout-details input{
+.checkout-details input {
   margin: 10px;
 }
 
@@ -98,3 +98,77 @@ body {
   margin: 10px;
 }
 
+.show-cart-button,
+.close-cart-item,
+.finalize-cart-item {
+  margin: 10px;
+}
+
+.login-modal-body,
+.form-group label {
+  margin-right: 5%;
+}
+
+.login-modal-body,
+.form-group input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.login-modal-body,
+.form-group input[type="password"] {
+  margin-left: 1%;
+}
+
+.error-display {
+  font-weight: bold;
+  color: red;
+}
+
+@media screen and (min-width:991px){
+  .sub-items-cards .card {
+    width:25%
+  }
+  
+  .sub-items-cards .card-img{
+    width:100%
+  }
+
+  .selected-item-details .card {
+    width: 25%;
+  }
+
+  .selected-item-details .card-img {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 990px) {
+  .sub-items-cards {
+    position: inherit;
+    z-index: 1000;
+  }
+  .sub-items-cards .card {
+    width:90%
+  }
+
+  .sub-items-cards .card-img{
+    width:100%
+  }
+
+  .show-cart {
+    position: relative;
+    z-index: 4000;
+    width: 100%;
+    height: unset;
+  }
+  .selected-item-details .card {
+    width: 40%;
+  }
+  .selected-item-details .card-img {
+    width: 100%;
+  }
+}
+
+.card-body {
+  padding: 5px !important;
+}

@@ -7,7 +7,6 @@ import { fetchCategories,fetchSubCategories ,postItemsToCart, fetchCartItems} fr
 import LoginPage from "./LoginPage";
 import ProductsPage from "./ProductsPage";
 
-import Test from './test11'
 //once we connect the mapStateToProps to the component with connect(), mapStateToProps gets state as an argument
 const mapStateToProps = (state) => {
   return {

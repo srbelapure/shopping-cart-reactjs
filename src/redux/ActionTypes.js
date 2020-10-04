@@ -11,6 +11,7 @@ export const SUB_CATEGORIES_ADD = "SUB_CATEGORIES_ADD";
 //add items to cart
 export const ADD_ITEMS_TO_CART = "ADD_ITEMS_TO_CART";
 export const ADD_ITEMS_TO_CART_FAILED = "ADD_ITEMS_TO_CART_FAILED";
+export const ADD_ITEM_TO_CART = "ADD_ITEM_TO_CART"
 
 
 

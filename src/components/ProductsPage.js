@@ -24,6 +24,7 @@ import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Fade from "react-reveal/Fade";
 import { v4 as uuidv4 } from "uuid";
+import LoaderComponent from './LoaderComponent'
 
 var testArr = [];
 //once we connect the mapStateToProps to the component with connect(), mapStateToProps gets state as an argument
@@ -225,14 +226,6 @@ class ProductsPage extends Component {
   };
 
   handleCheckoutDetails = (e) => {
-    alert("hi");
-    e.preventDefault();
-    console.log(
-      "eeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-      this.fname.current.value,
-      this.addressRef.current.value,
-      this.emailIdRef.current.value
-    );
     this.setState({
       checkOutDetails: {
         name: this.fname.current.value,
@@ -254,6 +247,7 @@ class ProductsPage extends Component {
     var checkOrderDate = day + "/" + month + "/" + year;
 
     var itemsListFromServer = this.props.cartItems.cartItemsList;
+   if( itemsListFromServer && itemsListFromServer[0]){
     var selectedItemsCart = itemsListFromServer.reduce((a, b) => {
       var i = a.findIndex((x) => x.name === b.name);
       return (
@@ -285,13 +279,14 @@ class ProductsPage extends Component {
         }
       );
     }
+   }
 
     return (
       <div className="container-section">
-        <button onClick={this.openCart}>Show Cart</button>
+        <button className="show-cart-button" onClick={this.openCart}>Show Cart</button>
         <div className={this.state.isCartVisible ? "show-cart" : "hide-cart"}>
-          <button onClick={this.closeCart}>Close Cart</button>
-          <button onClick={this.showCheckoutDetails}>
+          <button className="close-cart-item" onClick={this.closeCart}>Close Cart</button>
+          <button className="finalize-cart-item" onClick={this.showCheckoutDetails}>
             Finalize Cart Items
           </button>
           <br />
@@ -332,14 +327,12 @@ class ProductsPage extends Component {
             )}
           </div>
           <div>TOTAL : {totalAmountOfAllItemsInCart}$</div>
-          <div>
-            {selectedItemsCart.map((item, index) => {
+          <div className="selected-item-details">
+            {selectedItemsCart ? selectedItemsCart.map((item, index) => {
               return (
                 <Card
                   style={{
                     border: "2px solid black",
-                    height: "100px",
-                    width: "100px",
                     margin: "10px",
                   }}
                   key={index}
@@ -348,7 +341,6 @@ class ProductsPage extends Component {
                     alt={item.name}
                     src={item.image}
                     height="100px"
-                    width="100px"
                   ></CardImg>
                   <CardBody>
                     <CardTitle>{item.name}</CardTitle>
@@ -367,7 +359,7 @@ class ProductsPage extends Component {
                   </CardBody>
                 </Card>
               );
-            })}
+            }):<div>Loading..........</div>}
           </div>
         </div>
         <div className="category-items">
@@ -382,7 +374,7 @@ class ProductsPage extends Component {
               );
             })
           ) : (
-            <div>Loading...........</div>
+            <LoaderComponent/>
           )}
         </div>
         <div className="sub-items-cards">
@@ -392,8 +384,6 @@ class ProductsPage extends Component {
                 <Card
                   style={{
                     border: "2px solid black",
-                    height: "300px",
-                    width: "300px",
                     margin: "10px",
                   }}
                 >
@@ -401,7 +391,6 @@ class ProductsPage extends Component {
                     alt={item.name}
                     src={item.image}
                     height="290px"
-                    width="290px"
                   ></CardImg>
                   <CardBody>
                     <CardTitle>{item.name}</CardTitle>
@@ -450,7 +439,7 @@ class ProductsPage extends Component {
               </React.Fragment>
 
               <div className="order-details">Cart Items:</div>
-              {selectedItemsCart.map((item) => {
+              {selectedItemsCart ? selectedItemsCart.map((item) => {
                 return (
                   <React.Fragment key={item.id}>
                     <div
@@ -461,7 +450,7 @@ class ProductsPage extends Component {
                     </div>
                   </React.Fragment>
                 );
-              })}
+              }):<div>Loading.............</div>}
               <div className="order-details">
                 <b>Total : {totalAmountOfAllItemsInCart}</b>
               </div>
