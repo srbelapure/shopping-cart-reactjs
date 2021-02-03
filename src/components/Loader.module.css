@@ -5,8 +5,8 @@
 
   .loader {
     border: 20px solid #f3f3f3;
-    position:absolute;
-    left:80%;
+    position:relative;
+    left:50%;
     border-radius: 90%;
     border-top: 20px solid purple;
     border-bottom: 20px solid green;

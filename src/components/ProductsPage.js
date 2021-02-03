@@ -19,12 +19,13 @@ import {
   fetchSubCategories,
   postItemsToCart,
   fetchCartItems,
+  deleteCartItems
 } from "../redux/ActionCreators";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Fade from "react-reveal/Fade";
 import { v4 as uuidv4 } from "uuid";
-import LoaderComponent from './LoaderComponent'
+import LoaderComponent from "./LoaderComponent";
 
 var testArr = [];
 //once we connect the mapStateToProps to the component with connect(), mapStateToProps gets state as an argument
@@ -37,7 +38,10 @@ const mapStateToProps = (state) => {
 //once we connect mapDispatchToProps to component with connect(),mapDispatchToProps gets dispatch as an argument
 const mapDispatchToProps = (dispatch) => ({
   fetchCartItems: () => dispatch(fetchCartItems()),
-  postItemsToCart:(id,categoryid,name,image,date,price,size)=>dispatch(postItemsToCart(id,categoryid,name,image,date,price,size))
+  postItemsToCart: (id, categoryid, name, image, date, price, size) =>
+    dispatch(postItemsToCart(id, categoryid, name, image, date, price, size)),
+    deleteCartItems:(id)=>dispatch(deleteCartItems(id))
+
 });
 
 class ProductsPage extends Component {
@@ -136,7 +140,6 @@ class ProductsPage extends Component {
       item.price,
       item.size
     );
-
     //we have tried to use a callback in this setState, so that updated value of state is available immediately
     // Generally setState is asynchronous so it is not possible to get updated value immediately
     // this.setState(
@@ -199,18 +202,21 @@ class ProductsPage extends Component {
   };
 
   deleteItemFromCart = (item) => {
-    // alert(
-    //   "item name" + item.name + "item id" + item.id + "item.catid" + item.catid
-    // );
-    // console.log(
-    //   "this.props.cartItems.cartItemsList",
-    //   this.props.cartItems.cartItemsList
-    // );
+    alert(
+      "item name" + item.name + "item id" + item.id + "item.catid" + item.catid
+    );
+    console.log(
+      "this.props.cartItems.cartItemsList",
+      this.props.cartItems.cartItemsList,
+      this.props.cartItems.cartItemsList.length
+    );
     // debugger;
-    // var test = this.props.cartItems.cartItemsList.filter(
-    //   (x) => x.id !== item.id
-    // );
-    // console.log("testtttttttttttttttt", test);
+    var test = this.props.cartItems.cartItemsList.filter(
+      (x) => x.id !== item.id
+    );
+    console.log("array_deletion_before", this.props.cartItems.cartItemsList);
+    console.log("array_deletion_after", test);
+    this.props.deleteCartItems(item.id)
   };
 
   finalizeCartItems = () => {
@@ -237,7 +243,6 @@ class ProductsPage extends Component {
   };
 
   render() {
-    console.log("this.props.cartItems.cartItemsList",this.props.cartItems.cartItemsList)
     var checkOutDetails = this.state.checkOutDetails;
 
     var currentDate = new Date();
@@ -247,46 +252,52 @@ class ProductsPage extends Component {
     var checkOrderDate = day + "/" + month + "/" + year;
 
     var itemsListFromServer = this.props.cartItems.cartItemsList;
-   if( itemsListFromServer && itemsListFromServer[0]){
-    var selectedItemsCart = itemsListFromServer.reduce((a, b) => {
-      var i = a.findIndex((x) => x.name === b.name);
-      return (
-        i === -1
-          ? a.push({
-              id: b.id,
-              times: 1,
-              name: b.name,
-              image: b.image,
-              price: b.price,
-              catid: b.catid,
-              size: b.size,
-            })
-          : a[i].times++,
-        a
-      );
-    }, []);
+    if (itemsListFromServer && itemsListFromServer[0]) {
+      var selectedItemsCart = itemsListFromServer.reduce((a, b) => {
+        var i = a.findIndex((x) => x.name === b.name);
+        return (
+          i === -1
+            ? a.push({
+                id: b.id,
+                times: 1,
+                name: b.name,
+                image: b.image,
+                price: b.price,
+                catid: b.catid,
+                size: b.size,
+              })
+            : a[i].times++,
+          a
+        );
+      }, []);
 
-    if (selectedItemsCart) {
-      var amountOfCartItems = selectedItemsCart.map((item) => {
-        return item.price * item.times;
-      });
+      if (selectedItemsCart) {
+        var amountOfCartItems = selectedItemsCart.map((item) => {
+          return item.price * item.times;
+        });
+      }
+
+      if (amountOfCartItems.length > 0) {
+        var totalAmountOfAllItemsInCart = amountOfCartItems.reduce(
+          (total, sum) => {
+            return total + sum;
+          }
+        );
+      }
     }
-
-    if (amountOfCartItems.length > 0) {
-      var totalAmountOfAllItemsInCart = amountOfCartItems.reduce(
-        (total, sum) => {
-          return total + sum;
-        }
-      );
-    }
-   }
-
     return (
       <div className="container-section">
-        <button className="show-cart-button" onClick={this.openCart}>Show Cart</button>
+        <button className="show-cart-button" onClick={this.openCart}>
+          Show Cart
+        </button>
         <div className={this.state.isCartVisible ? "show-cart" : "hide-cart"}>
-          <button className="close-cart-item" onClick={this.closeCart}>Close Cart</button>
-          <button className="finalize-cart-item" onClick={this.showCheckoutDetails}>
+          <button className="close-cart-item" onClick={this.closeCart}>
+            Close Cart
+          </button>
+          <button
+            className="finalize-cart-item"
+            onClick={this.showCheckoutDetails}
+          >
             Finalize Cart Items
           </button>
           <br />
@@ -328,38 +339,42 @@ class ProductsPage extends Component {
           </div>
           <div>TOTAL : {totalAmountOfAllItemsInCart}$</div>
           <div className="selected-item-details">
-            {selectedItemsCart ? selectedItemsCart.map((item, index) => {
-              return (
-                <Card
-                  style={{
-                    border: "2px solid black",
-                    margin: "10px",
-                  }}
-                  key={index}
-                >
-                  <CardImg
-                    alt={item.name}
-                    src={item.image}
-                    height="100px"
-                  ></CardImg>
-                  <CardBody>
-                    <CardTitle>{item.name}</CardTitle>
-                    <CardSubtitle></CardSubtitle>
-                    <CardText>
-                      <b>
-                        Price: {item.price}$ x {item.times}
-                      </b>{" "}
-                      <br />
-                      <b>Quantity : {item.times}</b>
-                      <br />
-                    </CardText>
-                    <button onClick={() => this.deleteItemFromCart(item)}>
-                      Delete Item
-                    </button>
-                  </CardBody>
-                </Card>
-              );
-            }):<div>Loading..........</div>}
+            {selectedItemsCart ? (
+              selectedItemsCart.map((item, index) => {
+                return (
+                  <Card
+                    style={{
+                      border: "2px solid black",
+                      margin: "10px",
+                    }}
+                    key={index}
+                  >
+                    <CardImg
+                      alt={item.name}
+                      src={item.image}
+                      height="100px"
+                    ></CardImg>
+                    <CardBody>
+                      <CardTitle>{item.name}</CardTitle>
+                      <CardSubtitle></CardSubtitle>
+                      <CardText>
+                        <b>
+                          Price: {item.price}$ x {item.times}
+                        </b>{" "}
+                        <br />
+                        <b>Quantity : {item.times}</b>
+                        <br />
+                      </CardText>
+                      <button onClick={() => this.deleteItemFromCart(item)}>
+                        Delete Item
+                      </button>
+                    </CardBody>
+                  </Card>
+                );
+              })
+            ) : (
+              <div>Loading..........</div>
+            )}
           </div>
         </div>
         <div className="category-items">
@@ -374,7 +389,7 @@ class ProductsPage extends Component {
               );
             })
           ) : (
-            <LoaderComponent/>
+            <LoaderComponent />
           )}
         </div>
         <div className="sub-items-cards">
@@ -439,20 +454,24 @@ class ProductsPage extends Component {
               </React.Fragment>
 
               <div className="order-details">Cart Items:</div>
-              {selectedItemsCart ? selectedItemsCart.map((item) => {
-                return (
-                  <React.Fragment key={item.id}>
-                    <div
-                      className="order-details-items"
-                      style={{ marginLeft: "40px" }}
-                    >
-                      {item.name} x {item.times}
-                    </div>
-                  </React.Fragment>
-                );
-              }):<div>Loading.............</div>}
+              {selectedItemsCart ? (
+                selectedItemsCart.map((item) => {
+                  return (
+                    <React.Fragment key={item.id}>
+                      <div
+                        className="order-details-items"
+                        style={{ marginLeft: "40px" }}
+                      >
+                        {item.name} x {item.times}
+                      </div>
+                    </React.Fragment>
+                  );
+                })
+              ) : (
+                <div>Loading.............</div>
+              )}
               <div className="order-details">
-                <b>Total : {totalAmountOfAllItemsInCart}</b>
+                <b>Total : {totalAmountOfAllItemsInCart}$</b>
               </div>
             </ModalBody>
           </Modal>

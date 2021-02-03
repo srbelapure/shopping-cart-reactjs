@@ -7,6 +7,8 @@ import { fetchCategories,fetchSubCategories ,postItemsToCart, fetchCartItems} fr
 import LoginPage from "./LoginPage";
 import ProductsPage from "./ProductsPage";
 
+// import FunctionsPage from './FunctionsPage.js'
+
 //once we connect the mapStateToProps to the component with connect(), mapStateToProps gets state as an argument
 const mapStateToProps = (state) => {
   return {
@@ -39,9 +41,13 @@ class Main extends Component {
   render() {
     return (
       <React.Fragment>
+        <div className='test-div'>
         <HeaderComponent headerTitle="$hoppingC@rt.inc"/>
         <Switch location={this.props.location}>
-          <Route exact path="/" component={LoginPage} />
+          <Route exact path="/" 
+          component={LoginPage} 
+          // component={FunctionsPage}
+          />
           <Route
             path="/products"
             component={() => (
@@ -56,6 +62,7 @@ class Main extends Component {
           />
         </Switch>
         <FooterComponent footerTitle="$hoppingC@rt.inc All Rights Reserved" />
+        </div>
       </React.Fragment>
     );
   }

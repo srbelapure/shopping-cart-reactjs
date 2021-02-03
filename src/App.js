@@ -4,6 +4,9 @@ import Main from "./components/Main";
 import { Provider } from "react-redux";
 import { ConfigureStore } from "./redux/ConfigureStore";
 
+
+import WorkMaterial from './components/WorkMaterial'
+
 const store = ConfigureStore();
 
 class App extends Component {
@@ -13,6 +16,7 @@ class App extends Component {
 				<BrowserRouter>
 					<React.Fragment>
 						<Main/>
+						{/* <WorkMaterial/> */}
 					</React.Fragment>
 				</BrowserRouter>
 			</Provider>
