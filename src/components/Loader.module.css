@@ -3,7 +3,7 @@
     100% { transform: rotate(360deg); }
   }
 
-  .loader {
+  /* .loader {
     border: 20px solid #f3f3f3;
     position:relative;
     left:50%;
@@ -12,6 +12,20 @@
     border-bottom: 20px solid green;
     border-right: 20px solid red;
     border-left:20px solid orange;
+    width: 150px;
+    height: 150px;
+    animation: spin 2s linear infinite;
+  } */
+
+  .loader {
+    border: 20px solid black;
+    position:relative;
+    left:50%;
+    border-radius: 90%;
+    border-top: 20px solid #808080;
+    border-bottom: 20px solid #808080;
+    border-right: 20px solid #4d4b4b;
+    border-left:20px solid #4d4b4b;
     width: 150px;
     height: 150px;
     animation: spin 2s linear infinite;

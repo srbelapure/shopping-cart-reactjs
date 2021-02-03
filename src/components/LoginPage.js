@@ -5,15 +5,9 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Label,
-  Col,
-  Row,
   Form,
-  FormGroup,
-  Input,
-  FormFeedback,
+  FormGroup
 } from "reactstrap";
-import Form11 from "./test11";
 
 function LoginPage(props) {
   var [modalState, setModalState] = useState(false);
@@ -27,9 +21,6 @@ function LoginPage(props) {
   }
 
   const handleLogin = (e) => {
-    // this.toggleModal();
-    // alert("Username: " + this.username.value + " Password: " + this.password.value
-    //     + " Remember: " + this.remember.checked);
     e.preventDefault();
     console.log(
       "Username: " +
@@ -63,7 +54,6 @@ function LoginPage(props) {
       password.current.value === undefined,
       password.current.value === " "
     );
-    // if(username.current && password.current){
     if (username.current.value === "")
       errors.username = "Enter a valid username";
     if (password.current.value === "")
@@ -71,10 +61,8 @@ function LoginPage(props) {
 
     return errors;
   }
-  // var addErrorsToRespectiveInputs= validate()
   return (
     <div>
-      {/* <Form11 /> */}
       <Button onClick={modalOpenClose}>Login Button</Button>
       <Modal isOpen={modalState} toggle={modalOpenClose}>
         <ModalHeader toggle={modalOpenClose}>Login Details</ModalHeader>

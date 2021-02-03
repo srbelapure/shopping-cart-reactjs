@@ -1,8 +1,6 @@
 import * as ActionTypes from "./ActionTypes";
 import { baseUrl } from "../shared/baseUrl";
 import { v4 as uuidv4 } from "uuid";
-import React, { Component } from "react";
-import LoaderComponent from "../components/LoaderComponent";
 
 //for loading categories
 export const categoriesLoading = () => ({
@@ -179,7 +177,6 @@ export const fetchCartItems = () => (dispatch) => {
         throw errmess;
       }
     )
-    .then(<LoaderComponent />)
     .then((response) => response.json())
     .then((cartitems) => dispatch(addItemsToCart(cartitems)))
     .catch((error) => dispatch(loadCartItemsFailed(error.message)));
@@ -193,7 +190,7 @@ export const deleteCartItems =(id)=>(dispatch)=>{
   },
   credentials: "same-origin"
 })
-.then(res => res.text()) // or res.json()
-.then(res => console.log(res))
+// .then(res => res.text()) // or res.json()
+// .then(res => console.log(res))
 .then(() => dispatch(fetchCartItems()))
 }

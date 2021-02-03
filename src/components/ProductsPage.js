@@ -3,8 +3,6 @@ import {
   Card,
   CardImg,
   CardTitle,
-  Breadcrumb,
-  BreadcrumbItem,
   CardBody,
   CardSubtitle,
   CardText,
@@ -15,19 +13,16 @@ import {
 } from "reactstrap";
 import "./PageTemplateDetails.css";
 import {
-  fetchCategories,
-  fetchSubCategories,
   postItemsToCart,
   fetchCartItems,
   deleteCartItems
 } from "../redux/ActionCreators";
-import { Switch, Route, Redirect, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Fade from "react-reveal/Fade";
 import { v4 as uuidv4 } from "uuid";
 import LoaderComponent from "./LoaderComponent";
 
-var testArr = [];
 //once we connect the mapStateToProps to the component with connect(), mapStateToProps gets state as an argument
 const mapStateToProps = (state) => {
   return {
@@ -54,7 +49,6 @@ class ProductsPage extends Component {
       totalBillAmountFOrSelectedItems: 0,
       paymentModal: false,
       showCheckoutDetails: false,
-      // checkOutDetails: [{ name: "", address: "", emailId: "" }],
       checkOutDetails: { name: "", address: "", emailId: "" },
     };
     this.fname = React.createRef();
@@ -88,18 +82,6 @@ class ProductsPage extends Component {
       prevProps.cartItems.cartItemsList.length,
       prevState.addSelectedItemsToCart.length
     );
-    // if (
-    //   prevProps.cartItems.cartItemsList.length !==
-    //   prevState.addSelectedItemsToCart.length
-    // ) {
-    //   this.props.fetchCartItems();
-    // }
-    // this.props.fetchCartItems();
-    // console.log(
-    //   "Component DID UPDATE prevProps, prevState!",
-    //   prevProps,
-    //   prevState
-    // );
   }
   componentWillUnmount() {
     console.log("Component WILL UNMOUNT!");
@@ -127,10 +109,7 @@ class ProductsPage extends Component {
     }
   }
 
-  addToCartHandleClick = (item, totalAmountOfAllItemsInCart) => {
-    // this.setState({
-    //   addSelectedItemsToCart: [...this.state.addSelectedItemsToCart, item],
-    // });
+  addToCartHandleClick = (item) => {
     this.props.postItemsToCart(
       item.id,
       item.catid,
@@ -145,47 +124,11 @@ class ProductsPage extends Component {
     // this.setState(
     //   {
     //     addSelectedItemsToCart: [...this.state.addSelectedItemsToCart, item],
-    //   },
-    //   function () {
-    //     this.testFunction(this.state.addSelectedItemsToCart);
     //   }
-    // );
 
     this.setState({
       isCartVisible: true,
     });
-  };
-
-  testFunction = (item) => {
-    var selectedItemsCart = item.reduce((a, b) => {
-      var i = a.findIndex((x) => x.name === b.name);
-      return (
-        i === -1
-          ? a.push({
-              id: b.id,
-              times: 1,
-              name: b.name,
-              image: b.image,
-              price: b.price,
-            })
-          : a[i].times++,
-        a
-      );
-    }, []);
-
-    if (selectedItemsCart) {
-      var amountOfCartItems = selectedItemsCart.map((item) => {
-        return item.price * item.times;
-      });
-    }
-
-    if (amountOfCartItems.length > 0) {
-      var totalAmountOfAllItemsInCart = amountOfCartItems.reduce(
-        (total, sum) => {
-          return total + sum;
-        }
-      );
-    }
   };
 
   closeCart = () => {
@@ -202,21 +145,7 @@ class ProductsPage extends Component {
   };
 
   deleteItemFromCart = (item) => {
-    alert(
-      "item name" + item.name + "item id" + item.id + "item.catid" + item.catid
-    );
-    console.log(
-      "this.props.cartItems.cartItemsList",
-      this.props.cartItems.cartItemsList,
-      this.props.cartItems.cartItemsList.length
-    );
-    // debugger;
-    var test = this.props.cartItems.cartItemsList.filter(
-      (x) => x.id !== item.id
-    );
-    console.log("array_deletion_before", this.props.cartItems.cartItemsList);
-    console.log("array_deletion_after", test);
-    this.props.deleteCartItems(item.id)
+    this.props.deleteCartItems(item)
   };
 
   finalizeCartItems = () => {
@@ -365,7 +294,7 @@ class ProductsPage extends Component {
                         <b>Quantity : {item.times}</b>
                         <br />
                       </CardText>
-                      <button onClick={() => this.deleteItemFromCart(item)}>
+                      <button onClick={() => this.deleteItemFromCart(item.id)}>
                         Delete Item
                       </button>
                     </CardBody>
@@ -373,7 +302,7 @@ class ProductsPage extends Component {
                 );
               })
             ) : (
-              <div>Loading..........</div>
+              <LoaderComponent/>
             )}
           </div>
         </div>
@@ -417,8 +346,7 @@ class ProductsPage extends Component {
                     <Button
                       onClick={() =>
                         this.addToCartHandleClick(
-                          item,
-                          totalAmountOfAllItemsInCart
+                          item
                         )
                       }
                     >
@@ -468,7 +396,7 @@ class ProductsPage extends Component {
                   );
                 })
               ) : (
-                <div>Loading.............</div>
+                <LoaderComponent/>
               )}
               <div className="order-details">
                 <b>Total : {totalAmountOfAllItemsInCart}$</b>
