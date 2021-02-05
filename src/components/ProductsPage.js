@@ -50,17 +50,19 @@ class ProductsPage extends Component {
       paymentModal: false,
       showCheckoutDetails: false,
       checkOutDetails: { name: "", address: "", emailId: "" },
+      checkoutItemsButton:false
     };
     this.fname = React.createRef();
     this.addressRef = React.createRef();
     this.emailIdRef = React.createRef();
+
   }
 
   componentWillMount() {
     console.log("Component WILL MOUNT!");
   }
   componentDidMount() {
-    this.props.fetchCartItems();
+    //this.props.fetchCartItems();
     console.log("Component DID MOUNT!");
   }
   componentWillReceiveProps(newProps) {
@@ -142,6 +144,12 @@ class ProductsPage extends Component {
       isCartVisible: true,
     });
     this.props.fetchCartItems();
+    console.log("aaaaaaaaa",this.fname.current===null)
+    if(this.fname.current===null&&this.addressRef.current===null&&this.emailIdRef.current===null){
+      this.setState({
+        checkoutItemsButton: true
+      })
+    }
   };
 
   deleteItemFromCart = (item) => {
@@ -161,6 +169,8 @@ class ProductsPage extends Component {
   };
 
   handleCheckoutDetails = (e) => {
+    console.log("this.fname.current.value",this.fname.current.value===''
+    ,this.fname.current.value===null,this.fname.current.value===undefined)
     this.setState({
       checkOutDetails: {
         name: this.fname.current.value,
@@ -169,7 +179,29 @@ class ProductsPage extends Component {
       },
     });
     this.finalizeCartItems();
+    if(this.fname.current.value===''&&this.addressRef.current.value===''&&this.emailIdRef.current.value===''){
+      // $('button.checkout-items').disabled=true
+      // this.checkoutItemsRef.current.disabled=true
+      this.setState({
+        checkoutItemsButton: true
+      })
+    }
   };
+
+  onInputValueChange=()=>{
+    if(this.fname.current.value==='' || this.addressRef.current.value==='' || this.emailIdRef.current.value===''){
+      // $('button.checkout-items').disabled=true
+      // this.checkoutItemsRef.current.disabled=true
+      this.setState({
+        checkoutItemsButton: true
+      })
+    }
+    else{
+      this.setState({
+        checkoutItemsButton: false
+      })
+    }
+  }
 
   render() {
     var checkOutDetails = this.state.checkOutDetails;
@@ -214,6 +246,7 @@ class ProductsPage extends Component {
         );
       }
     }
+
     return (
       <div className="container-section">
         <button className="show-cart-button" onClick={this.openCart}>
@@ -241,6 +274,7 @@ class ProductsPage extends Component {
                     id="fname"
                     // innerRef={(input) => this.fname = input}
                     ref={this.fname}
+                    onChange={this.onInputValueChange}
                   />
                   <br />
                   <label htmlFor="address">Address : </label>
@@ -249,6 +283,7 @@ class ProductsPage extends Component {
                     name="address"
                     id="address"
                     ref={this.addressRef}
+                    onChange={this.onInputValueChange}
                   />
                   <br />
                   <label htmlFor="mailid">Email : </label>
@@ -257,10 +292,11 @@ class ProductsPage extends Component {
                     name="mailid"
                     id="mailid"
                     ref={this.emailIdRef}
+                    onChange={this.onInputValueChange}
                   />
                   <br />
                 </form>
-                <button onClick={this.handleCheckoutDetails}>
+                <button className='checkout-items' onClick={this.handleCheckoutDetails} disabled={this.state.checkoutItemsButton}>
                   Checkout Items
                 </button>
               </Fade>
@@ -268,6 +304,7 @@ class ProductsPage extends Component {
           </div>
           <div>TOTAL : {totalAmountOfAllItemsInCart}$</div>
           <div className="selected-item-details">
+            {console.log("selectedItemsCartselectedItemsCart",selectedItemsCart)}
             {selectedItemsCart ? (
               selectedItemsCart.map((item, index) => {
                 return (

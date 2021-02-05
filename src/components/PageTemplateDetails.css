@@ -1,4 +1,4 @@
-html,
+/* html,
 body {
   height: 100%;
   margin: 0;
@@ -12,7 +12,7 @@ body {
 .container-section {
   height: 100%;
   overflow-y: scroll;
-}
+} */
 
 .footer-section,
 .header-section {
@@ -22,13 +22,13 @@ body {
   font-weight: bold;
 }
 
-.footer-section {
+/* .footer-section {
   position: sticky;
   left: 0;
   bottom: 0;
   width: 100%;
   margin-top: 5px;
-}
+} */
 
 .category-options {
   padding: 10px;
@@ -124,13 +124,13 @@ body {
   color: red;
 }
 
-@media screen and (min-width:991px){
+@media screen and (min-width: 991px) {
   .sub-items-cards .card {
-    width:25%
+    width: 25%;
   }
-  
-  .sub-items-cards .card-img{
-    width:100%
+
+  .sub-items-cards .card-img {
+    width: 100%;
   }
 
   .selected-item-details .card {
@@ -143,21 +143,22 @@ body {
 }
 
 @media screen and (max-width: 990px) {
+  /* z-index: :1050; ---- this is the z-index of modal so keep other z-indices less then this value */
   .sub-items-cards {
     position: inherit;
-    z-index: 1000;
+    z-index: 500;
   }
   .sub-items-cards .card {
-    width:90%
+    width: 90% !important;
   }
 
-  .sub-items-cards .card-img{
-    width:100%
+  .sub-items-cards .card-img {
+    width: 100%;
   }
 
   .show-cart {
     position: relative;
-    z-index: 4000;
+    z-index: 800;
     width: 100%;
     height: unset;
   }
@@ -171,4 +172,32 @@ body {
 
 .card-body {
   padding: 5px !important;
+}
+
+.checkout-items {
+  margin: 10px;
+}
+
+@media screen and (max-width: 767px) {
+  /* .checkout-details label{
+    width: 25%;
+  } */
+
+  .checkout-details input {
+    margin: 0;
+  }
+}
+
+body {
+  /* margin: 0; */
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.footer-section {
+  margin-top: auto;
 }

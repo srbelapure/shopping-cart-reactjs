@@ -36,7 +36,7 @@ class Main extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className='test-div'>
+        <div className='main-container'>
         <HeaderComponent headerTitle="$hoppingC@rt.inc"/>
         <Switch location={this.props.location}>
           <Route exact path="/" 
