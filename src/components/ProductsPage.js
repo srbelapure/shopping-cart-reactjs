@@ -15,13 +15,14 @@ import "./PageTemplateDetails.css";
 import {
   postItemsToCart,
   fetchCartItems,
-  deleteCartItems
+  deleteCartItems,
 } from "../redux/ActionCreators";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Fade from "react-reveal/Fade";
 import { v4 as uuidv4 } from "uuid";
 import LoaderComponent from "./LoaderComponent";
+import CartComponent from "./CartComponent";
 
 //once we connect the mapStateToProps to the component with connect(), mapStateToProps gets state as an argument
 const mapStateToProps = (state) => {
@@ -35,8 +36,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchCartItems: () => dispatch(fetchCartItems()),
   postItemsToCart: (id, categoryid, name, image, date, price, size) =>
     dispatch(postItemsToCart(id, categoryid, name, image, date, price, size)),
-    deleteCartItems:(id)=>dispatch(deleteCartItems(id))
-
+  deleteCartItems: (id) => dispatch(deleteCartItems(id)),
 });
 
 class ProductsPage extends Component {
@@ -50,12 +50,11 @@ class ProductsPage extends Component {
       paymentModal: false,
       showCheckoutDetails: false,
       checkOutDetails: { name: "", address: "", emailId: "" },
-      checkoutItemsButton:false
+      checkoutItemsButton: false,
     };
     this.fname = React.createRef();
     this.addressRef = React.createRef();
     this.emailIdRef = React.createRef();
-
   }
 
   componentWillMount() {
@@ -144,16 +143,20 @@ class ProductsPage extends Component {
       isCartVisible: true,
     });
     this.props.fetchCartItems();
-    console.log("aaaaaaaaa",this.fname.current===null)
-    if(this.fname.current===null&&this.addressRef.current===null&&this.emailIdRef.current===null){
+    console.log("aaaaaaaaa", this.fname.current === null);
+    if (
+      this.fname.current === null &&
+      this.addressRef.current === null &&
+      this.emailIdRef.current === null
+    ) {
       this.setState({
-        checkoutItemsButton: true
-      })
+        checkoutItemsButton: true,
+      });
     }
   };
 
   deleteItemFromCart = (item) => {
-    this.props.deleteCartItems(item)
+    this.props.deleteCartItems(item);
   };
 
   finalizeCartItems = () => {
@@ -169,8 +172,12 @@ class ProductsPage extends Component {
   };
 
   handleCheckoutDetails = (e) => {
-    console.log("this.fname.current.value",this.fname.current.value===''
-    ,this.fname.current.value===null,this.fname.current.value===undefined)
+    console.log(
+      "this.fname.current.value",
+      this.fname.current.value === "",
+      this.fname.current.value === null,
+      this.fname.current.value === undefined
+    );
     this.setState({
       checkOutDetails: {
         name: this.fname.current.value,
@@ -179,29 +186,36 @@ class ProductsPage extends Component {
       },
     });
     this.finalizeCartItems();
-    if(this.fname.current.value===''&&this.addressRef.current.value===''&&this.emailIdRef.current.value===''){
+    if (
+      this.fname.current.value === "" &&
+      this.addressRef.current.value === "" &&
+      this.emailIdRef.current.value === ""
+    ) {
       // $('button.checkout-items').disabled=true
       // this.checkoutItemsRef.current.disabled=true
       this.setState({
-        checkoutItemsButton: true
-      })
+        checkoutItemsButton: true,
+      });
     }
   };
 
-  onInputValueChange=()=>{
-    if(this.fname.current.value==='' || this.addressRef.current.value==='' || this.emailIdRef.current.value===''){
+  onInputValueChange = () => {
+    if (
+      this.fname.current.value === "" ||
+      this.addressRef.current.value === "" ||
+      this.emailIdRef.current.value === ""
+    ) {
       // $('button.checkout-items').disabled=true
       // this.checkoutItemsRef.current.disabled=true
       this.setState({
-        checkoutItemsButton: true
-      })
-    }
-    else{
+        checkoutItemsButton: true,
+      });
+    } else {
       this.setState({
-        checkoutItemsButton: false
-      })
+        checkoutItemsButton: false,
+      });
     }
-  }
+  };
 
   render() {
     var checkOutDetails = this.state.checkOutDetails;
@@ -249,7 +263,7 @@ class ProductsPage extends Component {
 
     return (
       <div className="container-section">
-        <button className="show-cart-button" onClick={this.openCart}>
+        <button className="show-cart-button" onClick={this.openCart} disabled={this.state.isCartVisible}>
           Show Cart
         </button>
         <div className={this.state.isCartVisible ? "show-cart" : "hide-cart"}>
@@ -296,7 +310,11 @@ class ProductsPage extends Component {
                   />
                   <br />
                 </form>
-                <button className='checkout-items' onClick={this.handleCheckoutDetails} disabled={this.state.checkoutItemsButton}>
+                <button
+                  className="checkout-items"
+                  onClick={this.handleCheckoutDetails}
+                  disabled={this.state.checkoutItemsButton}
+                >
                   Checkout Items
                 </button>
               </Fade>
@@ -304,7 +322,10 @@ class ProductsPage extends Component {
           </div>
           <div>TOTAL : {totalAmountOfAllItemsInCart}$</div>
           <div className="selected-item-details">
-            {console.log("selectedItemsCartselectedItemsCart",selectedItemsCart)}
+            {console.log(
+              "selectedItemsCartselectedItemsCart",
+              selectedItemsCart
+            )}
             {selectedItemsCart ? (
               selectedItemsCart.map((item, index) => {
                 return (
@@ -339,10 +360,18 @@ class ProductsPage extends Component {
                 );
               })
             ) : (
-              <LoaderComponent/>
+              <LoaderComponent />
             )}
           </div>
         </div>
+        {/*  */}
+        {/* <CartComponent
+          cartVisibilityState={this.state.isCartVisible}
+          totalAmountOfAllItemsInCart={totalAmountOfAllItemsInCart}
+          selectedItemsCart={selectedItemsCart}
+          fetchCartItems={this.props.fetchCartItems}
+        /> */}
+        {/*  */}
         <div className="category-items">
           {this.props.categoryDetails ? (
             this.props.categoryDetails.map((item) => {
@@ -380,13 +409,7 @@ class ProductsPage extends Component {
                       <b>Price: {item.price}$</b>
                       <br />
                     </CardText>
-                    <Button
-                      onClick={() =>
-                        this.addToCartHandleClick(
-                          item
-                        )
-                      }
-                    >
+                    <Button onClick={() => this.addToCartHandleClick(item)}>
                       Add To Cart
                     </Button>
                   </CardBody>
@@ -433,7 +456,7 @@ class ProductsPage extends Component {
                   );
                 })
               ) : (
-                <LoaderComponent/>
+                <LoaderComponent />
               )}
               <div className="order-details">
                 <b>Total : {totalAmountOfAllItemsInCart}$</b>
