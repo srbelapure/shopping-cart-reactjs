@@ -30,107 +30,17 @@ class CartComponent extends Component {
     this.emailIdRef = React.createRef();
   }
 
-  // componentDidMount(){
-  //   console.log("**********************************")
-  //   this.setState({
-  //     isCartVisible :this.props.cartVisibilityState
-  //   })
-  // }
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   console.log(
-  //     "Component DID UPDATE prevProps, prevState!************",
-  //     prevProps.cartVisibilityState,
-  //     prevState.isCartVisible
-  //   );
-  //   console.log("cartVisibilityState",this.props.cartVisibilityState)
-  //   console.log("this.state.isCartVisible",this.state.isCartVisible)
-  //   if(prevProps && this.props.cartVisibilityState){
-  //     this.setState({
-  //       isCartVisible :true
-  //     })
-  //   }
-  // }
-
-  // componentWillReceiveProps(newProps) {
-  //   console.log("Component WILL RECIEVE PROPS*************!", newProps);
-  //   console.log("cartVisibilityStatenewProps",this.props.cartVisibilityState,newProps.cartVisibilityState)
-  //   if((this.props.cartVisibilityState !== newProps.cartVisibilityState) && newProps.cartVisibilityState){
-  //     this.setState({
-  //       isCartVisible : newProps.cartVisibilityState
-  //     })
-  //   }
-  //   else{
-  //     this.setState({
-  //       isCartVisible : false
-  //     })
-  //   }
-  //   // if(!this.state.isCartVisible){
-  //   //   this.setState({
-  //   //     isCartVisible :newProps.cartVisibilityState
-  //   //   })
-  //   // }
-  // }
-////////////////
-  // addToCartHandleClick = (item) => {
-  //   this.props.postItemsToCart(
-  //     item.id,
-  //     item.catid,
-  //     item.name,
-  //     item.image,
-  //     item.date,
-  //     item.price,
-  //     item.size
-  //   );
-  //   //we have tried to use a callback in this setState, so that updated value of state is available immediately
-  //   // Generally setState is asynchronous so it is not possible to get updated value immediately
-  //   // this.setState(
-  //   //   {
-  //   //     addSelectedItemsToCart: [...this.state.addSelectedItemsToCart, item],
-  //   //   }
-
-  //   // this.setState({
-  //   //   isCartVisible: true,
-  //   // });
-  // };
-/////////////////////////
   closeCart = () => {
-    // if(this.props.cartVisibilityState){
-    //   this.setState({
-    //     isCartVisible: false,
-    //   });
-    // }
-    // else{
-    //   this.setState({
-    //     isCartVisible: false,
-    //   });
-    // }
-
-
     this.setState({
       isCartVisible: false,
     });
-
   };
 
   openCart = () => {
-    // if(this.props.cartVisibilityState){
-    //   this.setState({
-    //     isCartVisible: true,
-    //   });
-    // }
-    // else{
-    //   this.setState({
-    //     isCartVisible: true,
-    //   });
-    // }
-
     this.setState({
       isCartVisible: true,
     });
-
     this.props.fetchCartItems();
-    console.log("aaaaaaaaa", this.fname.current === null);
     if (
       this.fname.current === null &&
       this.addressRef.current === null &&
@@ -159,12 +69,6 @@ class CartComponent extends Component {
   };
 
   handleCheckoutDetails = (e) => {
-    console.log(
-      "this.fname.current.value",
-      this.fname.current.value === "",
-      this.fname.current.value === null,
-      this.fname.current.value === undefined
-    );
     this.setState({
       checkOutDetails: {
         name: this.fname.current.value,
@@ -178,8 +82,6 @@ class CartComponent extends Component {
       this.addressRef.current.value === "" &&
       this.emailIdRef.current.value === ""
     ) {
-      // $('button.checkout-items').disabled=true
-      // this.checkoutItemsRef.current.disabled=true
       this.setState({
         checkoutItemsButton: true,
       });
@@ -192,8 +94,6 @@ class CartComponent extends Component {
       this.addressRef.current.value === "" ||
       this.emailIdRef.current.value === ""
     ) {
-      // $('button.checkout-items').disabled=true
-      // this.checkoutItemsRef.current.disabled=true
       this.setState({
         checkoutItemsButton: true,
       });
@@ -218,9 +118,6 @@ class CartComponent extends Component {
           Show Cart
         </button>
         <div
-          // className={this.state.isCartVisible ? "show-cart" : 
-          // (this.state.isCartVisible && this.props.cartVisibilityState) ? "hide-cart" :
-          // (this.props.cartVisibilityState||this.state.isCartVisible)? "show-cart" : "hide-cart"}
           className={this.state.isCartVisible? "show-cart" : "hide-cart"}
         >
           <button className="close-cart-item" onClick={this.closeCart}>

@@ -1,8 +1,6 @@
 import * as ActionTypes from "./ActionTypes";
 import { baseUrl } from "../shared/baseUrl";
 import { v4 as uuidv4 } from "uuid";
-import React, { Component } from "react";
-import LoaderComponent from "../components/LoaderComponent";
 
 //for loading categories
 export const categoriesLoading = () => ({
@@ -149,12 +147,11 @@ export const postItemsToCart = (
     .then((response) => response.json())
     .then((response) =>
       alert(
-        response.name+" " + "item has been added to the cart!\n"
+        response.name + " " + "item has been added to the cart!\n"
       )
     )
     .then(() => dispatch(fetchCartItems()))
     .catch((error) => {
-      console.log("post comments", error.message);
       alert("Your comment could not be posted\nError: " + error.message);
     });
 };

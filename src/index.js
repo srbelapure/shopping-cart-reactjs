@@ -19,8 +19,8 @@ ReactDOM.render(
 serviceWorker.unregister();
 
 
-{/* <React.StrictMode><React.StrictMode/> ----> change from <React.StrictMode> to <React.Fragment></React.Fragment> to remove the error of
+/* <React.StrictMode><React.StrictMode/> ----> change from <React.StrictMode> to <React.Fragment></React.Fragment> to remove the error of
 "
 React / Reactstrap Warning: Legacy context API has been detected within a strict-mode tree
 
-" */}
+" */

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import FooterComponent from "./FooterComponent";
 import HeaderComponent from "./HeaderComponent";
-import { Switch, Route, Redirect, withRouter } from "react-router-dom";
+import { Switch, Route, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { fetchCategories,fetchSubCategories} from "../redux/ActionCreators";
 import LoginPage from "./LoginPage";
