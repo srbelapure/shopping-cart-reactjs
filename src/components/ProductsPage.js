@@ -20,7 +20,6 @@ import {
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Fade from "react-reveal/Fade";
-import { v4 as uuidv4 } from "uuid";
 import LoaderComponent from "./LoaderComponent";
 import CartComponent from "./CartComponent";
 
@@ -45,7 +44,7 @@ class ProductsPage extends Component {
     this.state = {
       subCategoryList: [],
       addSelectedItemsToCart: [],
-      isCartVisible: false,
+      ISCARTVISIBLE: false,
       totalBillAmountFOrSelectedItems: 0,
       paymentModal: false,
       showCheckoutDetails: false,
@@ -126,105 +125,104 @@ class ProductsPage extends Component {
     //   {
     //     addSelectedItemsToCart: [...this.state.addSelectedItemsToCart, item],
     //   }
-
-    this.setState({
-      isCartVisible: true,
-    });
+    // this.setState({
+    //   ISCARTVISIBLE: true,
+    // });
   };
 
-  closeCart = () => {
-    this.setState({
-      isCartVisible: false,
-    });
-  };
+  // closeCart = () => {
+  //   this.setState({
+  //     isCartVisible: false,
+  //   });
+  // };
 
-  openCart = () => {
-    this.setState({
-      isCartVisible: true,
-    });
-    this.props.fetchCartItems();
-    console.log("aaaaaaaaa", this.fname.current === null);
-    if (
-      this.fname.current === null &&
-      this.addressRef.current === null &&
-      this.emailIdRef.current === null
-    ) {
-      this.setState({
-        checkoutItemsButton: true,
-      });
-    }
-  };
+  // openCart = () => {
+  //   this.setState({
+  //     isCartVisible: true,
+  //   });
+  //   this.props.fetchCartItems();
+  //   console.log("aaaaaaaaa", this.fname.current === null);
+  //   if (
+  //     this.fname.current === null &&
+  //     this.addressRef.current === null &&
+  //     this.emailIdRef.current === null
+  //   ) {
+  //     this.setState({
+  //       checkoutItemsButton: true,
+  //     });
+  //   }
+  // };
 
-  deleteItemFromCart = (item) => {
-    this.props.deleteCartItems(item);
-  };
+  // deleteItemFromCart = (item) => {
+  //   this.props.deleteCartItems(item);
+  // };
 
-  finalizeCartItems = () => {
-    this.setState({
-      paymentModal: !this.state.paymentModal,
-    });
-  };
+  // finalizeCartItems = () => {
+  //   this.setState({
+  //     paymentModal: !this.state.paymentModal,
+  //   });
+  // };
 
-  showCheckoutDetails = () => {
-    this.setState({
-      showCheckoutDetails: !this.state.showCheckoutDetails,
-    });
-  };
+  // showCheckoutDetails = () => {
+  //   this.setState({
+  //     showCheckoutDetails: !this.state.showCheckoutDetails,
+  //   });
+  // };
 
-  handleCheckoutDetails = (e) => {
-    console.log(
-      "this.fname.current.value",
-      this.fname.current.value === "",
-      this.fname.current.value === null,
-      this.fname.current.value === undefined
-    );
-    this.setState({
-      checkOutDetails: {
-        name: this.fname.current.value,
-        address: this.addressRef.current.value,
-        emailId: this.emailIdRef.current.value,
-      },
-    });
-    this.finalizeCartItems();
-    if (
-      this.fname.current.value === "" &&
-      this.addressRef.current.value === "" &&
-      this.emailIdRef.current.value === ""
-    ) {
-      // $('button.checkout-items').disabled=true
-      // this.checkoutItemsRef.current.disabled=true
-      this.setState({
-        checkoutItemsButton: true,
-      });
-    }
-  };
+  // handleCheckoutDetails = (e) => {
+  //   console.log(
+  //     "this.fname.current.value",
+  //     this.fname.current.value === "",
+  //     this.fname.current.value === null,
+  //     this.fname.current.value === undefined
+  //   );
+  //   this.setState({
+  //     checkOutDetails: {
+  //       name: this.fname.current.value,
+  //       address: this.addressRef.current.value,
+  //       emailId: this.emailIdRef.current.value,
+  //     },
+  //   });
+  //   this.finalizeCartItems();
+  //   if (
+  //     this.fname.current.value === "" &&
+  //     this.addressRef.current.value === "" &&
+  //     this.emailIdRef.current.value === ""
+  //   ) {
+  //     // $('button.checkout-items').disabled=true
+  //     // this.checkoutItemsRef.current.disabled=true
+  //     this.setState({
+  //       checkoutItemsButton: true,
+  //     });
+  //   }
+  // };
 
-  onInputValueChange = () => {
-    if (
-      this.fname.current.value === "" ||
-      this.addressRef.current.value === "" ||
-      this.emailIdRef.current.value === ""
-    ) {
-      // $('button.checkout-items').disabled=true
-      // this.checkoutItemsRef.current.disabled=true
-      this.setState({
-        checkoutItemsButton: true,
-      });
-    } else {
-      this.setState({
-        checkoutItemsButton: false,
-      });
-    }
-  };
+  // onInputValueChange = () => {
+  //   if (
+  //     this.fname.current.value === "" ||
+  //     this.addressRef.current.value === "" ||
+  //     this.emailIdRef.current.value === ""
+  //   ) {
+  //     // $('button.checkout-items').disabled=true
+  //     // this.checkoutItemsRef.current.disabled=true
+  //     this.setState({
+  //       checkoutItemsButton: true,
+  //     });
+  //   } else {
+  //     this.setState({
+  //       checkoutItemsButton: false,
+  //     });
+  //   }
+  // };
 
   render() {
-    var checkOutDetails = this.state.checkOutDetails;
+    // var checkOutDetails = this.state.checkOutDetails;
 
-    var currentDate = new Date();
-    var month = currentDate.getMonth() + 1;
-    var day = currentDate.getDate();
-    var year = currentDate.getFullYear();
-    var checkOrderDate = day + "/" + month + "/" + year;
+    // var currentDate = new Date();
+    // var month = currentDate.getMonth() + 1;
+    // var day = currentDate.getDate();
+    // var year = currentDate.getFullYear();
+    // var checkOrderDate = day + "/" + month + "/" + year;
 
     var itemsListFromServer = this.props.cartItems.cartItemsList;
     if (itemsListFromServer && itemsListFromServer[0]) {
@@ -263,7 +261,7 @@ class ProductsPage extends Component {
 
     return (
       <div className="container-section">
-        <button className="show-cart-button" onClick={this.openCart} disabled={this.state.isCartVisible}>
+        {/* <button className="show-cart-button" onClick={this.openCart} disabled={this.state.isCartVisible}>
           Show Cart
         </button>
         <div className={this.state.isCartVisible ? "show-cart" : "hide-cart"}>
@@ -363,14 +361,15 @@ class ProductsPage extends Component {
               <LoaderComponent />
             )}
           </div>
-        </div>
+        </div> */}
         {/*  */}
-        {/* <CartComponent
-          cartVisibilityState={this.state.isCartVisible}
+        <CartComponent
+          cartVisibilityState={this.state.ISCARTVISIBLE}
           totalAmountOfAllItemsInCart={totalAmountOfAllItemsInCart}
           selectedItemsCart={selectedItemsCart}
           fetchCartItems={this.props.fetchCartItems}
-        /> */}
+          deleteCartItems={this.props.deleteCartItems}
+        />
         {/*  */}
         <div className="category-items">
           {this.props.categoryDetails ? (
@@ -418,7 +417,7 @@ class ProductsPage extends Component {
             );
           })}
         </div>
-        <div className="checkout-modal">
+        {/* <div className="checkout-modal">
           <Modal
             isOpen={this.state.paymentModal}
             toggle={this.finalizeCartItems}
@@ -463,7 +462,7 @@ class ProductsPage extends Component {
               </div>
             </ModalBody>
           </Modal>
-        </div>
+        </div> */}
       </div>
     );
   }

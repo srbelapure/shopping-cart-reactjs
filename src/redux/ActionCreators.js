@@ -1,6 +1,8 @@
 import * as ActionTypes from "./ActionTypes";
 import { baseUrl } from "../shared/baseUrl";
 import { v4 as uuidv4 } from "uuid";
+import React, { Component } from "react";
+import LoaderComponent from "../components/LoaderComponent";
 
 //for loading categories
 export const categoriesLoading = () => ({
@@ -147,8 +149,7 @@ export const postItemsToCart = (
     .then((response) => response.json())
     .then((response) =>
       alert(
-        "Following item has been added to the cart!\n" +
-          JSON.stringify(response)
+        response.name+" " + "item has been added to the cart!\n"
       )
     )
     .then(() => dispatch(fetchCartItems()))
@@ -191,6 +192,6 @@ export const deleteCartItems =(id)=>(dispatch)=>{
   credentials: "same-origin"
 })
 // .then(res => res.text()) // or res.json()
-// .then(res => console.log(res))
+.then(alert('Item is being deleted!!'))
 .then(() => dispatch(fetchCartItems()))
 }
