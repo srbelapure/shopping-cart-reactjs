@@ -20,6 +20,9 @@ body {
   padding: 15px;
   text-align: center;
   font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* .footer-section {
@@ -200,4 +203,13 @@ body {
 
 .footer-section {
   margin-top: auto;
+  justify-content: center;
+}
+
+.login-button,.signup-button,.logout-button{
+  margin: 5px;
+}
+
+.item-image{
+  object-fit: contain;
 }

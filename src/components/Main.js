@@ -39,8 +39,7 @@ class Main extends Component {
         <div className='main-container'>
         <HeaderComponent headerTitle="$hoppingC@rt.inc"/>
         <Switch location={this.props.location}>
-          <Route exact path="/" 
-          component={LoginPage} 
+          <Route exact path="/"
           />
           <Route
             path="/products"

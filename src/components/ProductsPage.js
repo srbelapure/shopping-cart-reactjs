@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState ,useEffect} from "react";
 import {
   Card,
   CardImg,
@@ -18,6 +18,8 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import LoaderComponent from "./LoaderComponent";
 import CartComponent from "./CartComponent";
+import { db } from "../Firebase";
+import { collection, getDocs,onSnapshot ,doc,addDoc, deleteDoc ,serverTimestamp } from "firebase/firestore";
 
 //once we connect the mapStateToProps to the component with connect(), mapStateToProps gets state as an argument
 const mapStateToProps = (state) => {
@@ -34,101 +36,104 @@ const mapDispatchToProps = (dispatch) => ({
   deleteCartItems: (id) => dispatch(deleteCartItems(id)),
 });
 
-class ProductsPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      subCategoryList: [],
-      addSelectedItemsToCart: [],
-      totalBillAmountFOrSelectedItems: 0
+function ProductsPage () {
+  const [categories,setCategories] = useState([])
+  const [subCategoryList,setSubCategoryList] = useState([])
+  const [subCatList,setSubCatList] = useState([])
+  const [cartItems,setCartItems] = useState([])
+  
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, "catrgories"),
+      (snapshot) => {
+        setCategories(
+          snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() }))
+        );
+      }
+    );
+    return () => {
+      unsubscribe();
     };
-  }
+  }, [])
 
-  componentWillMount() {
-    console.log("Component WILL MOUNT!");
-  }
-  componentDidMount() {
-    console.log("Component DID MOUNT!");
-  }
-  componentWillReceiveProps(newProps) {
-    console.log("Component WILL RECIEVE PROPS!");
-  }
-  shouldComponentUpdate(newProps, newState) {
-    return true;
-  }
-  componentWillUpdate(nextProps, nextState) {
-    console.log(
-      "Component WILL UPDATE nextProps, nextState!");
-  }
-  componentDidUpdate(prevProps, prevState) {
-    console.log(
-      "Component DID UPDATE prevProps, prevState!");
-  }
-  componentWillUnmount() {
-    console.log("Component WILL UNMOUNT!");
-  }
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, "subcategories"),
+      (snapshot) => {
+        setSubCategoryList(
+          snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() }))
+        );
+      }
+    );
+    return () => {
+      unsubscribe();
+    };
+  }, [])
 
-  handleButtonClick(id) {
-    if (id === 0) {
-      this.setState({
-        subCategoryList: this.props.subcategoryItems.filter(
-          (item) => item.catid === 0
-        ),
-      });
-    } else if (id === 1) {
-      this.setState({
-        subCategoryList: this.props.subcategoryItems.filter(
-          (item) => item.catid === 1
-        ),
-      });
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, "additemstocart"),
+      (snapshot) => {
+        setCartItems(
+          snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() }))
+        );
+      }
+    );
+    return () => {
+      unsubscribe();
+    };
+  }, [])
+  
+  const handleButtonClick=(id) =>{
+    if (id === 1) {
+      setSubCatList(
+        subCategoryList.filter((item)=>{
+          return item.post.catid === 1
+        })
+      )
     } else if (id === 2) {
-      this.setState({
-        subCategoryList: this.props.subcategoryItems.filter(
-          (item) => item.catid === 2
-        ),
-      });
+      setSubCatList(
+        subCategoryList.filter((item)=>{
+          return item.post.catid === 2
+        })
+      )
+    } else if (id === 3) {
+      setSubCatList(
+        subCategoryList.filter((item)=>{
+          return item.post.catid === 3
+        })
+      )
     }
   }
 
-  addToCartHandleClick = (item) => {
-    this.props.postItemsToCart(
-      item.id,
-      item.catid,
-      item.name,
-      item.image,
-      item.date,
-      item.price,
-      item.size
-    );
-    //we have tried to use a callback in this setState, so that updated value of state is available immediately
-    // Generally setState is asynchronous so it is not possible to get updated value immediately
-    // this.setState(
-    //   {
-    //     addSelectedItemsToCart: [...this.state.addSelectedItemsToCart, item],
-    //   }
+  const addToCartHandleClick = (item) => {
+    addDoc(collection(db, "additemstocart"), {
+      catid: item.post.catid,
+      id: item.post.id,
+      image: item.post.image,
+      name: item.post.name,
+      price: item.post.price,
+    });
   };
 
-  render() {
-    var itemsListFromServer = this.props.cartItems.cartItemsList;
-    if (itemsListFromServer && itemsListFromServer[0]) {
-      var selectedItemsCart = itemsListFromServer.reduce((a, b) => {
-        var i = a.findIndex((x) => x.name === b.name);
+    if (cartItems.length>0) {
+      var selectedItemsCart = cartItems.reduce((a, b) => {
+        var i = a.findIndex((x) => ((x.catid === b.post.catid) && (x.id === b.post.id)));
         return (
           i === -1
             ? a.push({
-                id: b.id,
+              queryId:b.id,
+                id: b.post.id,
                 times: 1,
-                name: b.name,
-                image: b.image,
-                price: b.price,
-                catid: b.catid,
-                size: b.size,
+                name: b.post.name,
+                image: b.post.image,
+                price: b.post.price,
+                catid: b.post.catid,
               })
             : a[i].times++,
           a
         );
       }, []);
-
       if (selectedItemsCart) {
         var amountOfCartItems = selectedItemsCart.map((item) => {
           return item.price * item.times;
@@ -149,16 +154,16 @@ class ProductsPage extends Component {
         <CartComponent
           totalAmountOfAllItemsInCart={totalAmountOfAllItemsInCart}
           selectedItemsCart={selectedItemsCart}
-          fetchCartItems={this.props.fetchCartItems}
-          deleteCartItems={this.props.deleteCartItems}
+          // fetchCartItems={cartItems}
+          // deleteCartItems={this.props.deleteCartItems}
         />
         <div className="category-items">
-          {this.props.categoryDetails ? (
-            this.props.categoryDetails.map((item) => {
+          {categories.length>0 ? (
+            categories.map((item) => {
               return (
                 <div key={item.id} className="category-options">
-                  <button onClick={() => this.handleButtonClick(item.id)}>
-                    {item.title}
+                  <button onClick={() => handleButtonClick(item.post.catid)}>
+                    {item.post.title}
                   </button>
                 </div>
               );
@@ -168,7 +173,7 @@ class ProductsPage extends Component {
           )}
         </div>
         <div className="sub-items-cards">
-          {this.state.subCategoryList.map((item) => {
+          {subCatList.map((item) => {
             return (
               <React.Fragment key={item.id}>
                 <Card
@@ -178,18 +183,19 @@ class ProductsPage extends Component {
                   }}
                 >
                   <CardImg
-                    alt={item.name}
-                    src={item.image}
+                    alt={item.post.name}
+                    src={item.post.image}
                     height="290px"
+                    className="item-image"
                   ></CardImg>
                   <CardBody>
-                    <CardTitle>{item.name}</CardTitle>
+                    <CardTitle>{item.post.name}</CardTitle>
                     <CardSubtitle></CardSubtitle>
                     <CardText>
-                      <b>Price: {item.price}$</b>
+                      <b>Price: {item.post.price}$</b>
                       <br />
                     </CardText>
-                    <Button onClick={() => this.addToCartHandleClick(item)}>
+                    <Button onClick={() => addToCartHandleClick(item)}>
                       Add To Cart
                     </Button>
                   </CardBody>
@@ -200,7 +206,6 @@ class ProductsPage extends Component {
         </div>
       </div>
     );
-  }
 }
 
 export default withRouter(

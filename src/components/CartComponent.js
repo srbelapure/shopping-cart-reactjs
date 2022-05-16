@@ -13,6 +13,8 @@ import {
 import Fade from "react-reveal/Fade";
 import LoaderComponent from "./LoaderComponent";
 import { v4 as uuidv4 } from "uuid";
+import { db } from "../Firebase";
+import { collection, getDocs,onSnapshot ,doc,addDoc, deleteDoc ,serverTimestamp } from "firebase/firestore";
 
 class CartComponent extends Component {
   constructor(props) {
@@ -34,13 +36,21 @@ class CartComponent extends Component {
     this.setState({
       isCartVisible: false,
     });
+    if (this.fname.current || this.addressRef.current || this.emailIdRef.current) {
+      this.fname.current.value = "";
+      this.addressRef.current.value = "";
+      this.emailIdRef.current.value = "";
+    }
+    this.setState({
+      showCheckoutDetails: false
+    });
   };
 
   openCart = () => {
     this.setState({
       isCartVisible: true,
     });
-    this.props.fetchCartItems();
+    // this.props.fetchCartItems();
     if (
       this.fname.current === null &&
       this.addressRef.current === null &&
@@ -53,7 +63,8 @@ class CartComponent extends Component {
   };
 
   deleteItemFromCart = (item) => {
-    this.props.deleteCartItems(item);
+    //this.props.deleteCartItems(item);
+    deleteDoc(doc(db, "additemstocart", item.queryId));
   };
 
   finalizeCartItems = () => {
@@ -103,7 +114,6 @@ class CartComponent extends Component {
       });
     }
   };
-
   render() {
     var checkOutDetails = this.state.checkOutDetails;
 
@@ -189,6 +199,7 @@ class CartComponent extends Component {
                       alt={item.name}
                       src={item.image}
                       height="100px"
+                      className="item-image"
                     ></CardImg>
                     <CardBody>
                       <CardTitle>{item.name}</CardTitle>
@@ -201,7 +212,7 @@ class CartComponent extends Component {
                         <b>Quantity : {item.times}</b>
                         <br />
                       </CardText>
-                      <button onClick={() => this.deleteItemFromCart(item.id)}>
+                      <button onClick={() => this.deleteItemFromCart(item)}>
                         Delete Item
                       </button>
                     </CardBody>

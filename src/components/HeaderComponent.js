@@ -1,10 +1,12 @@
 import React from 'react';
+import LoginPage from './LoginPage'
 import './PageTemplateDetails.css'
 
 const HeaderComponent =({headerTitle})=>{
     return(
         <div className="header-section">
-            {headerTitle}
+            <div>{headerTitle}</div>
+            <LoginPage/>
         </div>
     )
 }
