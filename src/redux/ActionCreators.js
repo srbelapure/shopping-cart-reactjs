@@ -1,6 +1,9 @@
 import * as ActionTypes from "./ActionTypes";
 import { baseUrl } from "../shared/baseUrl";
 import { v4 as uuidv4 } from "uuid";
+import { db } from "../Firebase";
+import { collection, getDocs,onSnapshot ,doc,addDoc, deleteDoc ,serverTimestamp } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 //for loading categories
 export const categoriesLoading = () => ({
@@ -21,28 +24,43 @@ export const addCategories = (categ) => ({
 
 //Thunk used to fetch categories
 export const fetchCategories = () => (dispatch) => {
+  let categoriesArray=[]
   dispatch(categoriesLoading(true));
-  return fetch(baseUrl + "categories")
-    .then(
-      (response) => {
-        if (response.ok) {
-          return response;
-        } else {
-          var error = new Error(
-            "Error " + response.status + ": " + response.statusText
-          );
-          error.response = response;
-          throw error;
-        }
-      },
-      (error) => {
-        var errmess = new Error(error.message);
-        throw errmess;
-      }
-    )
-    .then((response) => response.json())
-    .then((promos) => dispatch(addCategories(promos)))
-    .catch((error) => dispatch(categoriesFailed(error.message)));
+  onSnapshot(
+    collection(db, "catrgories"),
+    (snapshot) => {
+      // setCategories(
+      //   snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() }))
+      // );
+      categoriesArray = snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() }))
+      // return categoriesArray
+      dispatch(addCategories(categoriesArray))
+    },
+    (error)=>{
+      dispatch(categoriesFailed(error.message))
+    }
+  );
+  // return fetch(baseUrl + "categories")
+  //   .then(
+  //     (response) => {
+  //       if (response.ok) {
+  //         return response;
+  //       } else {
+  //         var error = new Error(
+  //           "Error " + response.status + ": " + response.statusText
+  //         );
+  //         error.response = response;
+  //         throw error;
+  //       }
+  //     },
+  //     (error) => {
+  //       var errmess = new Error(error.message);
+  //       throw errmess;
+  //     }
+  //   )
+  //   .then((response) => response.json())
+  //   .then((promos) => dispatch(addCategories(promos)))
+    //.catch((error) => dispatch(categoriesFailed(error.message)));
 };
 
 //for loading subcategories
@@ -64,28 +82,43 @@ export const addSubCategories = (categ) => ({
 
 //Thunk used to fetch subcategories
 export const fetchSubCategories = () => (dispatch) => {
+  let subCategoriesList=[]
   dispatch(subcategoriesLoading(true));
-  return fetch(baseUrl + "subcategories")
-    .then(
-      (response) => {
-        if (response.ok) {
-          return response;
-        } else {
-          var error = new Error(
-            "Error " + response.status + ": " + response.statusText
-          );
-          error.response = response;
-          throw error;
-        }
-      },
-      (error) => {
-        var errmess = new Error(error.message);
-        throw errmess;
-      }
-    )
-    .then((response) => response.json())
-    .then((promos) => dispatch(addSubCategories(promos)))
-    .catch((error) => dispatch(subcategoriesFailed(error.message)));
+  onSnapshot(
+    collection(db, "subcategories"),
+    (snapshot) => {
+      // setSubCategoryList(
+      //   snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() }))
+      // );
+      subCategoriesList=snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() }))
+      dispatch(addSubCategories(subCategoriesList))
+    },
+    (error)=>{
+      dispatch(subcategoriesFailed(error.message))
+    }
+  );
+
+  // return fetch(baseUrl + "subcategories")
+  //   .then(
+  //     (response) => {
+  //       if (response.ok) {
+  //         return response;
+  //       } else {
+  //         var error = new Error(
+  //           "Error " + response.status + ": " + response.statusText
+  //         );
+  //         error.response = response;
+  //         throw error;
+  //       }
+  //     },
+  //     (error) => {
+  //       var errmess = new Error(error.message);
+  //       throw errmess;
+  //     }
+  //   )
+  //   .then((response) => response.json())
+  //   .then((promos) => dispatch(addSubCategories(promos)))
+  //   .catch((error) => dispatch(subcategoriesFailed(error.message)));
 };
 
 //action to add items to cart
@@ -102,93 +135,112 @@ export const loadCartItemsFailed = (errorMessage) => ({
 
 //think to add items to cart
 export const postItemsToCart = (
+  catid,
   id,
-  categoryid,
-  name,
   image,
-  date,
+  name,
   price,
-  size
+  userid
 ) => (dispatch) => {
-  var itemsList = {
-    id: id + uuidv4(),
-    catid: categoryid,
+
+  addDoc(collection(db, "additemstocart"), {
+    catid: catid,
+    id: id,
+    image: image,
     name: name,
     price: price,
-    image: image,
-    date: date,
-    size: size
-  };
+    userid: userid
+  }).then(() => dispatch(fetchCartItems()))
 
-  return fetch(baseUrl + "additemstocart", {
-    method: "POST",
-    body: JSON.stringify(itemsList),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "same-origin",
-  })
-    .then(
-      (response) => {
-        if (response.ok) {
-          return response;
-        } else {
-          var error = new Error(
-            "Error " + response.status + ": " + response.statusText
-          );
-          error.response = response;
-          throw error;
-        }
-      },
-      (error) => {
-        throw error;
-      }
-    )
-    .then((response) => response.json())
-    .then((response) =>
-      alert(
-        response.name + " " + "item has been added to the cart!\n"
-      )
-    )
-    .then(() => dispatch(fetchCartItems()))
-    .catch((error) => {
-      alert("Your comment could not be posted\nError: " + error.message);
-    });
+  // return fetch(baseUrl + "additemstocart", {
+  //   method: "POST",
+  //   body: JSON.stringify(itemsList),
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   credentials: "same-origin",
+  // })
+  //   .then(
+  //     (response) => {
+  //       if (response.ok) {
+  //         return response;
+  //       } else {
+  //         var error = new Error(
+  //           "Error " + response.status + ": " + response.statusText
+  //         );
+  //         error.response = response;
+  //         throw error;
+  //       }
+  //     },
+  //     (error) => {
+  //       throw error;
+  //     }
+  //   )
+  //   .then((response) => response.json())
+  //   .then((response) =>
+  //     alert(
+  //       response.name + " " + "item has been added to the cart!\n"
+  //     )
+  //   )
+  //   .then(() => dispatch(fetchCartItems()))
+  //   .catch((error) => {
+  //     alert("Your comment could not be posted\nError: " + error.message);
+  //   });
 };
 
 export const fetchCartItems = () => (dispatch) => {
-  return fetch(baseUrl + "additemstocart")
-    .then(
-      (response) => {
-        if (response.ok) {
-          return response;
-        } else {
-          var error = new Error(
-            "Error " + response.status + ": " + response.statusText
-          );
-          error.response = response;
-          throw error;
-        }
-      },
-      (error) => {
-        var errmess = new Error(error.message);
-        throw errmess;
-      }
-    )
-    .then((response) => response.json())
-    .then((cartitems) => dispatch(addItemsToCart(cartitems)))
-    .catch((error) => dispatch(loadCartItemsFailed(error.message)));
+  let userSpecificCartItemsList=[]
+  onSnapshot(
+    collection(db, "additemstocart"),
+    (snapshot) => {
+        snapshot.docs.map((doc) => {
+          if(getAuth().currentUser.uid === doc.data().userid){
+            // setCartItems(result => [...result, ({ id: doc.id, post: doc.data() })]);
+            // setCartItems(...cartItems,({ id: doc.id, post: doc.data() }))
+            userSpecificCartItemsList=[...userSpecificCartItemsList,({ id: doc.id, post: doc.data() })]
+            dispatch(addItemsToCart(userSpecificCartItemsList))
+          }
+          
+        })
+    },
+    (error)=>{
+      dispatch(loadCartItemsFailed(error.message))
+    }
+  );
+
+  // return fetch(baseUrl + "additemstocart")
+  //   .then(
+  //     (response) => {
+  //       if (response.ok) {
+  //         return response;
+  //       } else {
+  //         var error = new Error(
+  //           "Error " + response.status + ": " + response.statusText
+  //         );
+  //         error.response = response;
+  //         throw error;
+  //       }
+  //     },
+  //     (error) => {
+  //       var errmess = new Error(error.message);
+  //       throw errmess;
+  //     }
+  //   )
+  //   .then((response) => response.json())
+  //   .then((cartitems) => dispatch(addItemsToCart(cartitems)))
+  //   .catch((error) => dispatch(loadCartItemsFailed(error.message)));
 };
 
 export const deleteCartItems =(id)=>(dispatch)=>{
-  return fetch(baseUrl + "additemstocart/" + id, {
-  method: 'DELETE',
-  headers: {
-    "Content-Type": "application/json",
-  },
-  credentials: "same-origin"
-})
-// .then(res => res.text()) // or res.json()
-.then(alert('Item is being deleted!!'))
-.then(() => dispatch(fetchCartItems()))
+  deleteDoc(doc(db, "additemstocart", id)).then(() => dispatch(fetchCartItems()))
+//   return fetch(baseUrl + "additemstocart/" + id, {
+//   method: 'DELETE',
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+//   credentials: "same-origin"
+// })
+// // .then(res => res.text()) // or res.json()
+// .then(alert('Item is being deleted!!'))
+// .then(() => dispatch(fetchCartItems()))
 }

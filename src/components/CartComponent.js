@@ -20,7 +20,6 @@ class CartComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isCartVisible: false,
       showCheckoutDetails: false,
       checkoutItemsButton: false,
 
@@ -33,9 +32,6 @@ class CartComponent extends Component {
   }
 
   closeCart = () => {
-    this.setState({
-      isCartVisible: false,
-    });
     if (this.fname.current || this.addressRef.current || this.emailIdRef.current) {
       this.fname.current.value = "";
       this.addressRef.current.value = "";
@@ -47,10 +43,6 @@ class CartComponent extends Component {
   };
 
   openCart = () => {
-    this.setState({
-      isCartVisible: true,
-    });
-    // this.props.fetchCartItems();
     if (
       this.fname.current === null &&
       this.addressRef.current === null &&
@@ -63,8 +55,7 @@ class CartComponent extends Component {
   };
 
   deleteItemFromCart = (item) => {
-    //this.props.deleteCartItems(item);
-    deleteDoc(doc(db, "additemstocart", item.queryId));
+    this.props.deleteCartItems(item.queryId);
   };
 
   finalizeCartItems = () => {
@@ -124,15 +115,15 @@ class CartComponent extends Component {
     var checkOrderDate = day + "/" + month + "/" + year;
     return (
       <div>
-        <button className="show-cart-button" onClick={this.openCart} disabled={this.state.isCartVisible}>
+        {/* <button className="show-cart-button" onClick={this.openCart} disabled={this.state.isCartVisible}>
           Show Cart
-        </button>
+        </button> */}
         <div
-          className={this.state.isCartVisible? "show-cart" : "hide-cart"}
+          className={this.props.isCartVisible? "show-cart" : "hide-cart"}
         >
-          <button className="close-cart-item" onClick={this.closeCart}>
+          {/* <button className="close-cart-item" onClick={this.closeCart}>
             Close Cart
-          </button>
+          </button> */}
           <button
             className="finalize-cart-item"
             onClick={this.showCheckoutDetails}

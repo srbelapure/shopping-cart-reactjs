@@ -4,7 +4,8 @@ import './PageTemplateDetails.css'
 const FooterComponent =(props)=>{
     return(
         <div className='footer-section'>
-            {props.footerTitle}
+            {/* {props.footerTitle} */}
+            E-cart
         </div>
     )
 }

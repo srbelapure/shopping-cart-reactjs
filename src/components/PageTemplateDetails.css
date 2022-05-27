@@ -145,7 +145,7 @@ body {
   }
 }
 
-@media screen and (max-width: 990px) {
+@media screen and (max-width: 500px) {
   /* z-index: :1050; ---- this is the z-index of modal so keep other z-indices less then this value */
   .sub-items-cards {
     position: inherit;
@@ -212,4 +212,8 @@ body {
 
 .item-image{
   object-fit: contain;
+}
+
+.badge.rounded-pill{
+  margin-right: 5px;
 }
