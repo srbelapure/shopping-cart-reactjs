@@ -95,6 +95,7 @@ function LoginPage(props) {
 
   const onClickLogout=()=>{
     signOut(auth)
+    sessionStorage.removeItem('selectedCategory')
     history.push("/");
   }
 

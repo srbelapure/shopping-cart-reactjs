@@ -7,6 +7,7 @@ import { fetchCategories,fetchSubCategories,
   fetchCartItems} from "../redux/ActionCreators";
 import LoginPage from "./LoginPage";
 import ProductsPage from "./ProductsPage";
+import './ComponentStyles.css'
 
 
 //once we connect the mapStateToProps to the component with connect(), mapStateToProps gets state as an argument

@@ -1,12 +1,15 @@
 import React from 'react';
 import LoginPage from './LoginPage'
 import Badge from 'react-bootstrap/Badge'
-import './PageTemplateDetails.css'
+import { useHistory } from "react-router-dom";
+// import './PageTemplateDetails.css'
+import './ComponentStyles.css'
 
 const HeaderComponent =({headerTitle,onClick,isCartVisible,cartItemsCount})=>{
+  const history = useHistory();
     return (
       <div className="header-section">
-        <div>E-cart</div>
+        <div onClick={()=>history.push('/products')} style={{cursor:'pointer'}}>E-cart</div>
         <LoginPage />
         <div className='cart-button'>
           <button

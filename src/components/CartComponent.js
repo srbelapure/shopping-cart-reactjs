@@ -9,6 +9,8 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  ModalFooter,
+  Button
 } from "reactstrap";
 import Fade from "react-reveal/Fade";
 import LoaderComponent from "./LoaderComponent";
@@ -21,7 +23,7 @@ class CartComponent extends Component {
     super(props);
     this.state = {
       showCheckoutDetails: false,
-      checkoutItemsButton: false,
+      checkoutItemsButton: true,
 
       paymentModal: false,
       checkOutDetails: { name: "", address: "", emailId: "" },
@@ -105,6 +107,17 @@ class CartComponent extends Component {
       });
     }
   };
+
+  onCheckoutModalClose=()=>{
+    this.setState({
+      paymentModal: !this.state.paymentModal,
+      checkoutItemsButton:true
+    });
+    this.fname.current.value = ""
+    this.addressRef.current.value = ""
+    this.emailIdRef.current.value = ""
+  }
+
   render() {
     var checkOutDetails = this.state.checkOutDetails;
 
@@ -120,6 +133,7 @@ class CartComponent extends Component {
         </button> */}
         <div
           className={this.props.isCartVisible? "show-cart" : "hide-cart"}
+          // className="cart-details-section"
         >
           {/* <button className="close-cart-item" onClick={this.closeCart}>
             Close Cart
@@ -135,33 +149,39 @@ class CartComponent extends Component {
             {this.state.showCheckoutDetails && (
               <Fade right cascade>
                 <form>
-                  <label htmlFor="fname">Name : </label>
-                  <input
-                    type="text"
-                    name="fname"
-                    id="fname"
-                    // innerRef={(input) => this.fname = input}
-                    ref={this.fname}
-                    onChange={this.onInputValueChange}
-                  />
+                  <div className="form-section">
+                    <label htmlFor="fname">Name : </label>
+                    <input
+                      type="text"
+                      name="fname"
+                      id="fname"
+                      // innerRef={(input) => this.fname = input}
+                      ref={this.fname}
+                      onChange={this.onInputValueChange}
+                    />
+                  </div>
                   <br />
-                  <label htmlFor="address">Address : </label>
-                  <input
-                    type="text"
-                    name="address"
-                    id="address"
-                    ref={this.addressRef}
-                    onChange={this.onInputValueChange}
-                  />
+                  <div className="form-section">
+                    <label htmlFor="address">Address : </label>
+                    <input
+                      type="text"
+                      name="address"
+                      id="address"
+                      ref={this.addressRef}
+                      onChange={this.onInputValueChange}
+                    />
+                  </div>
                   <br />
-                  <label htmlFor="mailid">Email : </label>
-                  <input
-                    type="email"
-                    name="mailid"
-                    id="mailid"
-                    ref={this.emailIdRef}
-                    onChange={this.onInputValueChange}
-                  />
+                  <div className="form-section">
+                    <label htmlFor="mailid">Email : </label>
+                    <input
+                      type="email"
+                      name="mailid"
+                      id="mailid"
+                      ref={this.emailIdRef}
+                      onChange={this.onInputValueChange}
+                    />
+                  </div>
                   <br />
                 </form>
                 <button
@@ -174,9 +194,11 @@ class CartComponent extends Component {
               </Fade>
             )}
           </div>
-          <div>TOTAL : {this.props.totalAmountOfAllItemsInCart}$</div>
+          <div style={{ fontWeight: 600 }}>
+            TOTAL : {this.props.totalAmountOfAllItemsInCart}$
+          </div>
           <div className="selected-item-details">
-            {this.props.selectedItemsCart ? (
+            {this.props.selectedItemsCart && this.props.selectedItemsCart.length>0 ? (
               this.props.selectedItemsCart.map((item, index) => {
                 return (
                   <Card
@@ -221,11 +243,11 @@ class CartComponent extends Component {
             isOpen={this.state.paymentModal}
             toggle={this.finalizeCartItems}
           >
-            <ModalHeader toggle={this.finalizeCartItems}>
+            <ModalHeader className="checkout-modal-header" toggle={this.finalizeCartItems}>
               <div style={{ color: "green", margin: "10px" }}>
                 Your order has been placed
               </div>
-              <div style={{ textAlign: "center" }}>Order: {uuidv4()}</div>
+              <div>Order: {uuidv4()}</div>
             </ModalHeader>
             <ModalBody>
               <React.Fragment>
@@ -240,7 +262,7 @@ class CartComponent extends Component {
               </React.Fragment>
 
               <div className="order-details">Cart Items:</div>
-              {this.props.selectedItemsCart ? (
+              {this.props.selectedItemsCart && this.props.selectedItemsCart.length>0 ? (
                 this.props.selectedItemsCart.map((item) => {
                   return (
                     <React.Fragment key={item.id}>
@@ -260,6 +282,7 @@ class CartComponent extends Component {
                 <b>Total : {this.props.totalAmountOfAllItemsInCart}$</b>
               </div>
             </ModalBody>
+            <ModalFooter><Button color="secondary" onClick={this.onCheckoutModalClose}>close</Button></ModalFooter>
           </Modal>
         </div>
       </div>

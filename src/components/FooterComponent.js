@@ -1,5 +1,6 @@
 import React from 'react';
-import './PageTemplateDetails.css'
+// import './PageTemplateDetails.css'
+import './ComponentStyles.css'
 
 const FooterComponent =(props)=>{
     return(

@@ -8,7 +8,7 @@ import {
   CardText,
   Button,
 } from "reactstrap";
-import "./PageTemplateDetails.css";
+import './ComponentStyles.css'
 import {
   postItemsToCart,
   deleteCartItems,
