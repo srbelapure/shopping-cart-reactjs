@@ -1,3 +1,9 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
 .footer-section,
 .header-section {
     background-color: darkgray;
@@ -9,12 +15,19 @@
     align-items: center;
 }
 
-.footer-section{
-    position: absolute;
-    bottom: 0px;
-    width: 100%;
-    display: flex;
+.footer-section {
+    margin-top: auto;
     justify-content: center;
+}
+
+.login-button,
+.signup-button,
+.logout-button {
+    margin: 5px;
+}
+
+.badge.rounded-pill {
+    margin-right: 5px;
 }
 
 .category-items {
@@ -38,6 +51,13 @@
 
 .item-image {
     object-fit: contain;
+    height: 23vw ;
+    width: 100%;
+}
+
+.card {
+    width: 50vh;
+    max-width: calc(100% - 200px);
 }
 
 .cart-details-section {
@@ -77,6 +97,10 @@
 
 .checkout-modal-header .close{
     display: none;
+}
+
+.card-function-button{
+  padding: 5px !important;
 }
 
 

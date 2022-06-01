@@ -221,7 +221,6 @@ function ProductsPage (props) {
                   <CardImg
                     alt={item.post.name}
                     src={item.post.image}
-                    height="290px"
                     className="item-image"
                   ></CardImg>
                   <CardBody>
@@ -231,7 +230,7 @@ function ProductsPage (props) {
                       <b>Price: {item.post.price}$</b>
                       <br />
                     </CardText>
-                    <Button onClick={() => addToCartHandleClick(item)}>
+                    <Button className="card-function-button" onClick={() => addToCartHandleClick(item)}>
                       Add To Cart
                     </Button>
                   </CardBody>

@@ -225,7 +225,7 @@ class CartComponent extends Component {
                         <b>Quantity : {item.times}</b>
                         <br />
                       </CardText>
-                      <button onClick={() => this.deleteItemFromCart(item)}>
+                      <button className="card-function-button" onClick={() => this.deleteItemFromCart(item)}>
                         Delete Item
                       </button>
                     </CardBody>
