@@ -59,6 +59,13 @@ function ProductsPage (props) {
     };
   }, [user]); // user,username => because everytime values change we need to trigger the useEffect hook
 
+  useEffect(() => {
+    setSubCatList(
+      props.subcategoryItems.filter((item)=>{
+        return item.post.catid === +sessionStorage.getItem('selectedCategory')
+      })
+    )
+  }, [props.cartItems])
   
   // useEffect(() => {
   //   const unsubscribe = onSnapshot(
@@ -112,6 +119,7 @@ function ProductsPage (props) {
   // }, [])
   
   const handleButtonClick=(id) =>{
+    sessionStorage.setItem('selectedCategory',id)
     if (id === 1) {
       setSubCatList(
         props.subcategoryItems.filter((item)=>{
