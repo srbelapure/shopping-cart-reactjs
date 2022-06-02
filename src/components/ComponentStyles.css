@@ -4,6 +4,15 @@
     min-height: 100vh;
 }
 
+.base-page-background {
+    background-image: url(https://img.freepik.com/free-vector/online-shopping-concept-illustration_114360-1084.jpg?t=st=1654200616~exp=1654201216~hmac=490ea3c…&w=996);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
 .footer-section,
 .header-section {
     background-color: darkgray;
@@ -49,17 +58,6 @@
     flex-wrap: wrap;
 }
 
-.item-image {
-    object-fit: contain;
-    height: 23vw ;
-    width: 100%;
-}
-
-.card {
-    width: 50vh;
-    max-width: calc(100% - 200px);
-}
-
 .cart-details-section {
     display: flex;
     flex-direction: column;
@@ -73,10 +71,15 @@
 .checkout-details {
     display: flex;
     flex-direction: column;
+    margin-top: 10px;
 }
 
 .checkout-items {
-    width: 30%;
+    display: flex;
+    flex: 0 1px;
+    justify-content: center;
+    width: 15em;
+    margin-bottom: 10px;
 }
 
 .form-section {
@@ -88,7 +91,7 @@
 }
 
 .form-section input {
-    flex: 1;
+    flex: 0 50vw;
 }
 
 .checkout-modal-header{
@@ -99,11 +102,66 @@
     display: none;
 }
 
+.checkout-modal-button{
+    display: flex;
+    justify-content: center !important;
+}
+
 .card-function-button{
   padding: 5px !important;
 }
 
+.empty-cart-description{
+    margin: auto;
+    font-size: 20px;
+    font-weight: 600;
+}
 
+.order-details{
+    display: flex;
+}
+
+.order-details label {
+    flex: 0 70px;
+}
+
+@media screen and (max-width:450px) {
+    .card {
+        width: 70vw;
+    }
+    .item-image.card-img {
+        width: 100%;
+        object-fit: contain;
+    }
+    .sub-items-cards, .selected-item-details{
+        justify-content: center;
+    }
+    .category-items{
+        justify-content: center;
+    }
+}
+@media screen and (max-width: 700px) and (min-width: 451px),(min-width:450px){
+    .card {
+        width: 40vw;
+    }
+    .item-image.card-img {
+        width: 100%;
+        height: 10em;
+        object-fit: contain;
+    }
+}
+
+@media screen and (min-width:701px) {
+    .card {
+        width: 20vw;
+        max-width: calc(100% - 2em);
+    }
+    .item-image.card-img {
+        width: 100%;
+        height: 8em;
+        object-fit: contain;
+    }
+}
 
 
 

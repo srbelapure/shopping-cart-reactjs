@@ -125,28 +125,31 @@ class CartComponent extends Component {
     var month = currentDate.getMonth() + 1;
     var day = currentDate.getDate();
     var year = currentDate.getFullYear();
-    var checkOrderDate = day + "/" + month + "/" + year;
+    var checkOrderDate = month + "/" + day + "/" + year;
     return (
       <div>
         {/* <button className="show-cart-button" onClick={this.openCart} disabled={this.state.isCartVisible}>
           Show Cart
         </button> */}
         <div
-          className={this.props.isCartVisible? "show-cart" : "hide-cart"}
-          // className="cart-details-section"
+          // className={this.props.isCartVisible? "show-cart" : "hide-cart"}
+          className="cart-details-section"
         >
           {/* <button className="close-cart-item" onClick={this.closeCart}>
             Close Cart
           </button> */}
-          <button
-            className="finalize-cart-item"
-            onClick={this.showCheckoutDetails}
-          >
-            Finalize Cart Items
-          </button>
-          <br />
+          {this.props.selectedItemsCart &&
+            this.props.selectedItemsCart.length > 0 &&
+            !this.props.cartItems.isLoading && (
+              <button
+                className="finalize-cart-item"
+                onClick={this.showCheckoutDetails}
+              >
+                Finalize Cart Items
+              </button>
+            )}
+          {this.state.showCheckoutDetails && (
           <div className="checkout-details">
-            {this.state.showCheckoutDetails && (
               <Fade right cascade>
                 <form>
                   <div className="form-section">
@@ -192,13 +195,18 @@ class CartComponent extends Component {
                   Checkout Items
                 </button>
               </Fade>
+          </div>
+          )}
+          {this.props.selectedItemsCart &&
+            this.props.selectedItemsCart.length > 0 &&
+            !this.props.cartItems.isLoading && (
+              <div style={{ fontWeight: 600,marginTop:"10px"}}>
+                TOTAL : {this.props.totalAmountOfAllItemsInCart}$
+              </div>
             )}
-          </div>
-          <div style={{ fontWeight: 600 }}>
-            TOTAL : {this.props.totalAmountOfAllItemsInCart}$
-          </div>
           <div className="selected-item-details">
-            {this.props.selectedItemsCart && this.props.selectedItemsCart.length>0 ? (
+            {this.props.selectedItemsCart &&
+            this.props.selectedItemsCart.length > 0 ? (
               this.props.selectedItemsCart.map((item, index) => {
                 return (
                   <Card
@@ -211,7 +219,6 @@ class CartComponent extends Component {
                     <CardImg
                       alt={item.name}
                       src={item.image}
-                      height="100px"
                       className="item-image"
                     ></CardImg>
                     <CardBody>
@@ -225,15 +232,22 @@ class CartComponent extends Component {
                         <b>Quantity : {item.times}</b>
                         <br />
                       </CardText>
-                      <button className="card-function-button" onClick={() => this.deleteItemFromCart(item)}>
+                      <button
+                        className="card-function-button"
+                        onClick={() => this.deleteItemFromCart(item)}
+                      >
                         Delete Item
                       </button>
                     </CardBody>
                   </Card>
                 );
               })
-            ) : (
+            ) : this.props.cartItems.isLoading ? (
               <LoaderComponent />
+            ) : (
+              <div className="empty-cart-description">
+                {"Your cart is empty..."}
+              </div>
             )}
           </div>
         </div>
@@ -243,7 +257,10 @@ class CartComponent extends Component {
             isOpen={this.state.paymentModal}
             toggle={this.finalizeCartItems}
           >
-            <ModalHeader className="checkout-modal-header" toggle={this.finalizeCartItems}>
+            <ModalHeader
+              className="checkout-modal-header"
+              toggle={this.finalizeCartItems}
+            >
               <div style={{ color: "green", margin: "10px" }}>
                 Your order has been placed
               </div>
@@ -251,18 +268,19 @@ class CartComponent extends Component {
             </ModalHeader>
             <ModalBody>
               <React.Fragment>
-                <div className="order-details">Name:{checkOutDetails.name}</div>
+                <div className="order-details"><label>Name : </label>{checkOutDetails.name}</div>
                 <div className="order-details">
-                  Address: {checkOutDetails.address}
+                  <label>Address : </label> {checkOutDetails.address}
                 </div>
                 <div className="order-details">
-                  Email : {checkOutDetails.emailId}
+                  <label>Email : </label>{checkOutDetails.emailId}
                 </div>
-                <div className="order-details">Date:{checkOrderDate}</div>
+                <div className="order-details"><label>Date:</label>{checkOrderDate}</div>
               </React.Fragment>
 
               <div className="order-details">Cart Items:</div>
-              {this.props.selectedItemsCart && this.props.selectedItemsCart.length>0 ? (
+              {this.props.selectedItemsCart &&
+              this.props.selectedItemsCart.length > 0 ? (
                 this.props.selectedItemsCart.map((item) => {
                   return (
                     <React.Fragment key={item.id}>
@@ -278,11 +296,15 @@ class CartComponent extends Component {
               ) : (
                 <LoaderComponent />
               )}
-              <div className="order-details">
+              <div className="order-details" style={{marginTop:"10px"}}>
                 <b>Total : {this.props.totalAmountOfAllItemsInCart}$</b>
               </div>
             </ModalBody>
-            <ModalFooter><Button color="secondary" onClick={this.onCheckoutModalClose}>close</Button></ModalFooter>
+            <ModalFooter className="checkout-modal-button">
+              <Button color="secondary" onClick={this.onCheckoutModalClose}>
+                close
+              </Button>
+            </ModalFooter>
           </Modal>
         </div>
       </div>

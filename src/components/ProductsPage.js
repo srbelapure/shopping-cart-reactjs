@@ -10,13 +10,11 @@ import {
 } from "reactstrap";
 import './ComponentStyles.css'
 import {
-  postItemsToCart,
-  deleteCartItems,
+  postItemsToCart
 } from "../redux/ActionCreators";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import LoaderComponent from "./LoaderComponent";
-import CartComponent from "./CartComponent";
 import { getAuth } from "firebase/auth";
 import { db } from "../Firebase";
 import { collection, getDocs,onSnapshot ,doc,addDoc, deleteDoc ,serverTimestamp } from "firebase/firestore";
@@ -33,8 +31,7 @@ const mapStateToProps = (state) => {
 //once we connect mapDispatchToProps to component with connect(),mapDispatchToProps gets dispatch as an argument
 const mapDispatchToProps = (dispatch) => ({
   postItemsToCart: (catid, id, image, name, price, userid) =>
-    dispatch(postItemsToCart(catid, id, image, name, price, userid)),
-  deleteCartItems: (id) => dispatch(deleteCartItems(id)),
+    dispatch(postItemsToCart(catid, id, image, name, price, userid))
 });
 
 function ProductsPage (props) {
@@ -152,50 +149,50 @@ function ProductsPage (props) {
     );
   };
 
-    if (props.cartItems && props.cartItems.length>0) {
-      var selectedItemsCart = props.cartItems.reduce((a, b) => {
-        var i = a.findIndex((x) => ((x.catid === b.post.catid) && (x.id === b.post.id)));
-        return (
-          i === -1
-            ? a.push({
-              queryId:b.id,
-                id: b.post.id,
-                times: 1,
-                name: b.post.name,
-                image: b.post.image,
-                price: b.post.price,
-                catid: b.post.catid,
-              })
-            : a[i].times++,
-          a
-        );
-      }, []);
-      if (selectedItemsCart) {
-        var amountOfCartItems = selectedItemsCart.map((item) => {
-          return item.price * item.times;
-        });
-      }
+    // if (props.cartItems && props.cartItems.length>0) {
+    //   var selectedItemsCart = props.cartItems.reduce((a, b) => {
+    //     var i = a.findIndex((x) => ((x.catid === b.post.catid) && (x.id === b.post.id)));
+    //     return (
+    //       i === -1
+    //         ? a.push({
+    //           queryId:b.id,
+    //             id: b.post.id,
+    //             times: 1,
+    //             name: b.post.name,
+    //             image: b.post.image,
+    //             price: b.post.price,
+    //             catid: b.post.catid,
+    //           })
+    //         : a[i].times++,
+    //       a
+    //     );
+    //   }, []);
+    //   if (selectedItemsCart) {
+    //     var amountOfCartItems = selectedItemsCart.map((item) => {
+    //       return item.price * item.times;
+    //     });
+    //   }
 
-      if (amountOfCartItems.length > 0) {
-        var totalAmountOfAllItemsInCart = amountOfCartItems.reduce(
-          (total, sum) => {
-            return total + sum;
-          }
-        );
-      }
-    }
+    //   if (amountOfCartItems.length > 0) {
+    //     var totalAmountOfAllItemsInCart = amountOfCartItems.reduce(
+    //       (total, sum) => {
+    //         return total + sum;
+    //       }
+    //     );
+    //   }
+    // }
     return (
       <div className="container-section">
-        <CartComponent
+        {/* <CartComponent
           totalAmountOfAllItemsInCart={totalAmountOfAllItemsInCart}
           selectedItemsCart={selectedItemsCart}
           deleteCartItems={props.deleteCartItems}
           isCartVisible={props.isCartVisible}
           // cartItems={props.cartItems}
-        />
+        /> */}
         <div className="category-items">
-          {props.categoryDetails.length>0 ? (
-            props.categoryDetails.map((item) => {
+          {props.categoryDetails.categories.length>0 && !props.categoryDetails.isLoading? (
+            props.categoryDetails.categories.map((item) => {
               return (
                 <div key={item.id} className="category-options">
                   <button onClick={() => handleButtonClick(item.post.catid)}>
@@ -204,9 +201,7 @@ function ProductsPage (props) {
                 </div>
               );
             })
-          ) : (
-            <LoaderComponent />
-          )}
+          ) : <LoaderComponent />}
         </div>
         <div className="sub-items-cards">
           {subCatList.map((item) => {

@@ -133,6 +133,11 @@ export const loadCartItemsFailed = (errorMessage) => ({
   payload: errorMessage,
 });
 
+//for loading cartItems
+export const cartItemsLoading = () => ({
+  type: ActionTypes.CART_ITEMS_LOADING,
+});
+
 //think to add items to cart
 export const postItemsToCart = (
   catid,
@@ -190,6 +195,7 @@ export const postItemsToCart = (
 
 export const fetchCartItems = () => (dispatch) => {
   let userSpecificCartItemsList=[]
+  dispatch(cartItemsLoading(true));
   onSnapshot(
     collection(db, "additemstocart"),
     (snapshot) => {
