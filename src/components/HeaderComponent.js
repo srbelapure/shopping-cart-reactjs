@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 // import './PageTemplateDetails.css'
 import './ComponentStyles.css'
 
-const HeaderComponent =({headerTitle,onClick,isCartVisible,cartItemsCount})=>{
+const HeaderComponent =({headerTitle,onClick,isCartVisible,cartItemsCount,fetchCartItems})=>{
   const [userDetail, setUserDetail] = useState()
   const history = useHistory();
   const isUserLoggedIn =(val)=>{
@@ -19,7 +19,7 @@ const HeaderComponent =({headerTitle,onClick,isCartVisible,cartItemsCount})=>{
         >
           E-cart
         </div>
-        <LoginPage isUserLoggedIn={(val) => isUserLoggedIn(val)} />
+        <LoginPage isUserLoggedIn={(val) => isUserLoggedIn(val)} fetchCartItems={fetchCartItems}/>
         {userDetail && userDetail.displayName && (
           <div className="cart-button">
             <button

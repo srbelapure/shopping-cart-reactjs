@@ -24,6 +24,7 @@ function LoginPage(props) {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        props.fetchCartItems()
         history.push("/products");
       }
       else{

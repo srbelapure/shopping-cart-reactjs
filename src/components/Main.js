@@ -62,6 +62,7 @@ class Main extends Component {
             onClick={this.openCart}
             isCartVisible={this.state.isCartVisible}
             cartItemsCount={this.props.cartItems.cartItemsList.length}
+            fetchCartItems={this.props.fetchCartItems}
           />
           <Switch location={this.props.location}>
             <Route exact path="/" />
