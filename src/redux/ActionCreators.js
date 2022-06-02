@@ -194,14 +194,11 @@ export const fetchCartItems = () => (dispatch) => {
     collection(db, "additemstocart"),
     (snapshot) => {
         snapshot.docs.map((doc) => {
-          if(getAuth().currentUser.uid === doc.data().userid){
-            // setCartItems(result => [...result, ({ id: doc.id, post: doc.data() })]);
-            // setCartItems(...cartItems,({ id: doc.id, post: doc.data() }))
+          if(getAuth().currentUser && getAuth().currentUser.uid === doc.data().userid){
             userSpecificCartItemsList=[...userSpecificCartItemsList,({ id: doc.id, post: doc.data() })]
-            dispatch(addItemsToCart(userSpecificCartItemsList))
-          }
-          
+          } 
         })
+        dispatch(addItemsToCart(userSpecificCartItemsList))
     },
     (error)=>{
       dispatch(loadCartItemsFailed(error.message))

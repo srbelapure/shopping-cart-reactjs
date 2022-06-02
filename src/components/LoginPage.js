@@ -50,6 +50,7 @@ function LoginPage(props) {
         // if user has loggedd out
         setUser(null); // if user logs out set user to null
       }
+      props.isUserLoggedIn(user)
     });
     return () => {
       // whenever changes occue this hook is refired, but before that clean-up the existing case and then re-trigger

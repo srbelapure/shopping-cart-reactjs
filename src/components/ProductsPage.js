@@ -152,7 +152,7 @@ function ProductsPage (props) {
     );
   };
 
-    if (props.cartItems.length>0) {
+    if (props.cartItems && props.cartItems.length>0) {
       var selectedItemsCart = props.cartItems.reduce((a, b) => {
         var i = a.findIndex((x) => ((x.catid === b.post.catid) && (x.id === b.post.id)));
         return (
